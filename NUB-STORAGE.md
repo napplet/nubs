@@ -47,7 +47,7 @@ All methods are async because they cross the postMessage boundary. Each request 
 
 ## Event Kinds
 
-Storage operations are transported via postMessage using IPC-PEER events (kind 29003) with topic tags for routing.
+Storage operations are transported via postMessage using IFC_PEER events (kind 29003) with topic tags for routing.
 
 | Kind | Name | Direction | Description |
 |------|------|-----------|-------------|
