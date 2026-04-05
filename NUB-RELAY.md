@@ -8,7 +8,7 @@ NIP-01 Relay Proxy
 
 **NUB ID:** NUB-RELAY
 **Namespace:** `window.napplet.relay`
-**Discovery:** `shell.supports("NUB-RELAY")`
+**Discovery:** `shell.supports("relay")`
 
 ## Description
 
@@ -72,28 +72,18 @@ events.
   messages, per NIP-01 semantics.
 - The shell MAY enforce ACL checks on `relay:read` and `relay:write`
   capabilities before processing REQ or EVENT messages.
-- The shell MAY support scoped relay connections via kind 29001 events with
-  topic `shell:relay-scoped-connect`. The scoped relay flow uses three topics:
-  `shell:relay-scoped-connect` (open), `shell:relay-scoped-close` (tear down),
-  and `shell:relay-scoped-publish` (send event to scoped relay).
+- The shell MAY support scoped relay connections for targeting a specific
+  relay (e.g., NIP-29 group relays) independently from the shared pool.
 - The shell MAY send `["CLOSED", subId, msg]` to indicate a subscription was
   closed by the shell (e.g., due to an error or policy).
 - The shell MAY send `["NOTICE", msg]` for human-readable status messages.
 
 ## Event Kinds
 
-This interface primarily uses NIP-01 wire format verbs (REQ, EVENT, CLOSE,
-EOSE, OK, CLOSED, NOTICE) which are not custom event kinds. For scoped relay
-operations, it uses:
-
-| Kind | Name | Direction | Description |
-|------|------|-----------|-------------|
-| 29001 | Scoped relay connect | napplet -> shell | `t` tag: `shell:relay-scoped-connect`. Includes `url`, `group`, `sub-id`, `filters` tags. |
-| 29001 | Scoped relay close | napplet -> shell | `t` tag: `shell:relay-scoped-close`. Tears down the scoped relay connection. |
-| 29001 | Scoped relay publish | napplet -> shell | `t` tag: `shell:relay-scoped-publish`. Includes `event` tag with JSON-serialized signed event. |
-
-All scoped relay commands use the IPC-PEER bus (kind 29001, same as signer
-requests) with topic tags for routing.
+This interface uses NIP-01 wire format verbs (REQ, EVENT, CLOSE, EOSE, OK,
+CLOSED, NOTICE) which are not custom event kinds. Scoped relay operations are
+an implementation detail of the shell and do not define additional event kinds
+at this layer.
 
 ## Security Considerations
 
@@ -109,7 +99,3 @@ requests) with topic tags for routing.
 - Subscription filters SHOULD be validated to prevent resource exhaustion
   (e.g., unbounded subscriptions without `limit`).
 
-## Implementations
-
-- [@napplet/shim](https://github.com/sandwichfarm/napplet) (napplet-side: `packages/shim/src/relay-shim.ts`)
-- [@napplet/shell](https://github.com/sandwichfarm/napplet) (shell-side: `packages/runtime/src/shell-bridge.ts`)
