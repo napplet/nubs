@@ -62,12 +62,28 @@ can resolve the correct Promise.
 - The shell SHOULD support backward-compatible migration across storage key
   format changes.
 
-## Transport
+## Event Kinds
 
-Storage operations are transported via postMessage between the napplet iframe
-and the shell. Each request includes a correlation ID; the shell responds with
-a matching ID so the napplet can resolve the correct Promise. The internal
-message format is an implementation detail of the shell.
+Storage operations are transported via postMessage using IPC-PEER events (kind
+29003) with topic tags for routing.
+
+| Kind | Name | Direction | Description |
+|------|------|-----------|-------------|
+| 29003 | Storage get | napplet -> shell | `t` tag: `shell:state-get`. Includes `id` (correlation) and `key` tags. |
+| 29003 | Storage set | napplet -> shell | `t` tag: `shell:state-set`. Includes `id`, `key`, and `value` tags. |
+| 29003 | Storage remove | napplet -> shell | `t` tag: `shell:state-remove`. Includes `id` and `key` tags. |
+| 29003 | Storage keys | napplet -> shell | `t` tag: `shell:state-keys`. Includes `id` tag. |
+| 29003 | Storage response | shell -> napplet | `t` tag: `napplet:state-response`. Includes `id` tag matching request, plus `value`/`found`/`error`/`key` tags as appropriate. |
+
+### Response Tags
+
+| Tag | Usage |
+|-----|-------|
+| `id` | Correlation ID matching the request |
+| `found` | `"true"` or `"false"` -- whether the key exists (getItem) |
+| `value` | The stored value (getItem response) |
+| `key` | Repeated tag, one per key (keys response) |
+| `error` | Error reason string (quota exceeded, missing key, etc.) |
 
 ## Security Considerations
 
