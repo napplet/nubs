@@ -8,7 +8,7 @@ Authenticated Point-to-Point Connections
 
 **NUB ID:** NUB-PIPES
 **Namespace:** `window.napplet.pipes`
-**Discovery:** `shell.supports("NUB-PIPES")`
+**Discovery:** `shell.supports("pipes")`
 
 ## Description
 
@@ -229,8 +229,8 @@ CLOSED --> OPENING --> OPEN --> CLOSING --> CLOSED
 ```
 
 - **CLOSED**: No pipe exists. Initial and terminal state.
-- **OPENING**: PIPE_OPEN sent, awaiting PIPE_ACK. Timeout after
-  `REQUEST_TIMEOUT_MS` (default 10000ms, matching signer request precedent).
+- **OPENING**: PIPE_OPEN sent, awaiting PIPE_ACK. The client SHOULD enforce
+  a timeout (e.g., 10000ms).
 - **OPEN**: PIPE_ACK received. Data messages flow freely.
 - **CLOSING**: PIPE_CLOSE sent, awaiting PIPE_CLOSED confirmation.
 - **ERROR**: PIPE_ERROR received. Pipe transitions to CLOSED.
@@ -335,7 +335,7 @@ channel used by NIP-01 relay messages, distinguished by their verb prefix.
 | **Overhead per msg** | ~500 bytes + Schnorr sign/verify | ~30 bytes envelope |
 | **Coupling** | Loose -- sender does not know recipients | Tight -- both sides negotiate connection |
 | **Use case** | Infrequent coordination, notifications | Data streams, real-time sync, commands |
-| **Status** | Implemented (@napplet/shim, kind 29003) | Unimplemented (this spec) |
+| **Status** | Implemented (kind 29003) | Unimplemented (this spec) |
 
 ## Future Extensions
 
@@ -363,7 +363,4 @@ channel used by NIP-01 relay messages, distinguished by their verb prefix.
   `Sec-WebSocket-Protocol`) on open. Deferred -- peers can negotiate via
   initial data messages on the open pipe.
 
-## Implementations
 
-- No implementations exist. This spec is a draft for future implementation in
-  `@napplet/shim` (client) and `@napplet/runtime` (shell-side pipe router).
