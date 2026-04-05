@@ -8,7 +8,7 @@ Local Event Database
 
 **NUB ID:** NUB-NOSTRDB
 **Namespace:** `window.nostrdb`
-**Discovery:** `shell.supports("NUB-NOSTRDB")`
+**Discovery:** `shell.supports("nostrdb")`
 
 ## Description
 
@@ -38,7 +38,7 @@ interface NostrDb {
 
 - **`count(filters)`** -- Returns the number of events matching the filters, following NIP-45 COUNT semantics.
 
-- **`supports()`** -- Returns the list of supported method names. The reference implementation returns `['query', 'add', 'event', 'replaceable', 'count', 'subscribe']`.
+- **`supports()`** -- Returns the list of supported method names.
 
 - **`subscribe(filters)`** -- Returns an `AsyncGenerator` that yields new events matching the filters as they arrive in the database. The generator runs indefinitely until the caller breaks out of the iteration loop, at which point an unsubscribe message is sent and resources are cleaned up automatically via the generator's `finally` block.
 
@@ -85,9 +85,5 @@ All NIPDB_RESPONSE events include:
 - `add()` allows napplets to insert events into the shared database. The shell SHOULD validate event signatures before storing.
 - The database is shared across napplets. Events added by one napplet are visible to others with database access. This is intentional (shared cache), but the shell MAY scope access per napplet if needed.
 - The `subscribe` method creates long-lived connections. The shell SHOULD clean up subscriptions when the napplet's iframe is removed or when the napplet disconnects.
-- Request timeouts are enforced client-side (10 seconds in the reference implementation). The shell SHOULD respond promptly to avoid timeout-induced rejections.
+- The shell SHOULD respond promptly to requests. Clients SHOULD enforce request timeouts to avoid indefinite blocking.
 
-## Implementations
-
-- [@napplet/shim](https://github.com/sandwichfarm/napplet) -- napplet-side (`window.nostrdb` installation via `installNostrDb()`)
-- [@napplet/shell](https://github.com/sandwichfarm/napplet) -- shell-side (NIPDB request routing to WorkerRelay)
