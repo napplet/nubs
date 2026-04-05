@@ -21,7 +21,7 @@ consume them. Discovery: `shell.supports("NUB-RELAY")`.
 | [NUB-STORAGE](https://github.com/napplet/nubs/pull/3) | `window.napplet.storage` | Scoped key-value storage | Draft |
 | [NUB-SIGNER](https://github.com/napplet/nubs/pull/1) | `window.nostr` | NIP-07 signer proxy | Draft |
 | [NUB-NOSTRDB](https://github.com/napplet/nubs/pull/4) | `window.nostrdb` | Local event database | Draft |
-| [NUB-IPC](https://github.com/napplet/nubs/pull/5) | `window.napplet.ipc` | Inter-napplet pub/sub | Draft |
+| [NUB-IFC](https://github.com/napplet/nubs/pull/5) | `window.napplet.ifc` | Inter-frame communication | Draft |
 | [NUB-PIPES](https://github.com/napplet/nubs/pull/6) | `window.napplet.pipes` | Authenticated point-to-point connections | Draft |
 
 ### NUB-NN (Message Protocol Specs)

@@ -1,23 +1,23 @@
-NUB-IPC
+NUB-IFC
 =======
 
-Inter-Napplet Pub/Sub
----------------------
+Inter-Frame Communication
+-------------------------
 
 `draft`
 
-**NUB ID:** NUB-IPC
-**Namespace:** `window.napplet.ipc`
-**Discovery:** `shell.supports("ipc")`
+**NUB ID:** NUB-IFC
+**Namespace:** `window.napplet.ifc`
+**Discovery:** `shell.supports("ifc")`
 
 ## Description
 
-NUB-IPC provides a topic-based publish/subscribe system for communication between napplets. Messages are routed through the shell using NIP-01 event subscriptions on kind 29003 (IPC_PEER). The sender publishes a signed event with a topic tag; any napplet subscribed to that topic receives the event. This is loose coupling -- the sender does not know who (if anyone) receives the message. The shell also uses IPC_PEER events internally for state operations, service coordination, and configuration commands.
+NUB-IFC provides a topic-based publish/subscribe system for communication between napplets. Messages are routed through the shell using NIP-01 event subscriptions on kind 29003 (IFC_PEER). The sender publishes a signed event with a topic tag; any napplet subscribed to that topic receives the event. This is loose coupling -- the sender does not know who (if anyone) receives the message. The shell also uses IFC_PEER events internally for state operations, service coordination, and configuration commands.
 
 ## API Surface
 
 ```typescript
-interface NappletIpc {
+interface NappletIfc {
   emit(topic: string, extraTags?: string[][], content?: string): void;
   on(topic: string, callback: (payload: unknown, event: NostrEvent) => void): Subscription;
 }
@@ -36,8 +36,8 @@ interface Subscription {
 - The shell MUST route kind 29003 events to all napplets with matching NIP-01 subscriptions.
 - The shell MUST use NIP-01 filter matching on the `#t` (topic) tag for subscription routing.
 - The shell MUST NOT deliver an event back to the sender (sender exclusion).
-- The shell MUST support standard NIP-01 subscription lifecycle (REQ/EVENT/EOSE/CLOSE) for IPC subscriptions.
-- The shell MAY enforce ACL checks on IPC capabilities.
+- The shell MUST support standard NIP-01 subscription lifecycle (REQ/EVENT/EOSE/CLOSE) for IFC subscriptions.
+- The shell MAY enforce ACL checks on IFC capabilities.
 - The shell MAY intercept specific topic prefixes (e.g., `shell:*`) for internal command handling rather than routing them to other napplets.
 
 ## Topic Conventions
@@ -56,11 +56,11 @@ These conventions are advisory. The shell routes by NIP-01 filter match, not by 
 
 | Kind | Name | Direction | Description |
 |------|------|-----------|-------------|
-| 29003 | IPC_PEER | bidirectional | Topic in `t` tag, payload in `content`. Shell routes by NIP-01 subscription filter matching. |
+| 29003 | IFC_PEER | bidirectional | Topic in `t` tag, payload in `content`. Shell routes by NIP-01 subscription filter matching. |
 
 ### Event Structure
 
-An IPC_PEER event has the following structure:
+An IFC_PEER event has the following structure:
 
 ```json
 {
@@ -77,12 +77,12 @@ The event is signed with the napplet's delegated session key before posting to t
 
 ## Security Considerations
 
-- IPC messages are signed with the napplet's delegated session key. The shell verifies signatures before routing.
+- IFC messages are signed with the napplet's delegated session key. The shell verifies signatures before routing.
 - Topic namespaces are not enforced -- any napplet can emit on any topic. The shell MAY restrict topics via ACL.
 - Content is a JSON-serializable string. The receiving napplet is responsible for validating the parsed payload. The `on()` helper catches JSON parse failures and falls back to `{}`.
 - Sender exclusion prevents echo loops but does not prevent a malicious napplet from impersonating messages. Receivers should validate event pubkeys if sender identity matters.
-- IPC is per-message authenticated (full NIP-01 event with Schnorr signature). For high-frequency communication where per-message signing overhead is unacceptable, use NUB-PIPES instead.
+- IFC is per-message authenticated (full NIP-01 event with Schnorr signature). For high-frequency communication where per-message signing overhead is unacceptable, use NUB-PIPES instead.
 
 ## Relationship to NUB-PIPES
 
-NUB-IPC is for loose-coupled, topic-based pub/sub with per-message authentication. NUB-PIPES is for tight-coupled, point-to-point connections with auth-on-open semantics. Both coexist in the napplet protocol: IPC for infrequent coordination (UI commands, state sync, configuration), pipes for sustained data streams (real-time collaboration, media).
+NUB-IFC is for loose-coupled, topic-based pub/sub with per-message authentication. NUB-PIPES is for tight-coupled, point-to-point connections with auth-on-open semantics. Both coexist in the napplet protocol: IFC for infrequent coordination (UI commands, state sync, configuration), pipes for sustained data streams (real-time collaboration, media).
