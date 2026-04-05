@@ -8,7 +8,7 @@ NIP-07 Signer Proxy
 
 **NUB ID:** NUB-SIGNER
 **Namespace:** `window.nostr`
-**Discovery:** `shell.supports("NUB-SIGNER")`
+**Discovery:** `shell.supports("signer")`
 
 ## Description
 
@@ -55,12 +55,12 @@ This is the standard NIP-07 interface. NUB-SIGNER does not extend or modify it.
   (0: metadata, 3: contacts, 5: deletion, 10002: relay list).
 - The shell MUST NOT expose the user's private key material to the napplet.
 
-## Event Kinds
+## Transport
 
-| Kind | Name | Direction | Description |
-|------|------|-----------|-------------|
-| 29001 | Signer request | napplet -> shell | `method` tag identifies the operation (e.g., `signEvent`, `getPublicKey`). `id` tag for correlation. `param` tags carry method arguments. |
-| 29002 | Signer response | shell -> napplet | `id` tag matching request. `result` tag with JSON-serialized return value, or `error` tag with reason string. |
+Signer operations are transported via postMessage between the napplet iframe
+and the shell. Each request includes a correlation ID; the shell responds with
+a matching ID so the napplet can resolve the correct Promise. The internal
+message format is an implementation detail of the shell.
 
 ## Security Considerations
 
@@ -75,10 +75,6 @@ This is the standard NIP-07 interface. NUB-SIGNER does not extend or modify it.
 - NIP-04 and NIP-44 encryption/decryption expose plaintext to the napplet.
   The shell MAY gate these behind explicit ACL capabilities (`sign:nip04`,
   `sign:nip44`).
-- Signer request timeouts (30 seconds in the reference implementation) prevent
-  indefinite blocking when the signer is unavailable.
+- The shell SHOULD enforce signer request timeouts to prevent indefinite
+  blocking when the signer is unavailable.
 
-## Implementations
-
-- [@napplet/shim](https://github.com/sandwichfarm/napplet) (napplet-side: `packages/shim/src/index.ts`)
-- [@napplet/shell](https://github.com/sandwichfarm/napplet) (shell-side: `packages/runtime/src/signer-handler.ts`)
