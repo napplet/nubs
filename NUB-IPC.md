@@ -8,11 +8,11 @@ Inter-Napplet Pub/Sub
 
 **NUB ID:** NUB-IPC
 **Namespace:** `window.napplet.ipc`
-**Discovery:** `shell.supports("NUB-IPC")`
+**Discovery:** `shell.supports("ipc")`
 
 ## Description
 
-NUB-IPC provides a topic-based publish/subscribe system for communication between napplets. Messages are routed through the shell using NIP-01 event subscriptions on kind 29003 (IPC_PEER). The sender publishes a signed event with a topic tag; any napplet subscribed to that topic receives the event. This is loose coupling -- the sender does not know who (if anyone) receives the message. The shell also uses IPC_PEER events internally for state operations, audio coordination, and configuration commands.
+NUB-IPC provides a topic-based publish/subscribe system for communication between napplets. Messages are routed through the shell using NIP-01 event subscriptions on kind 29003 (IPC_PEER). The sender publishes a signed event with a topic tag; any napplet subscribed to that topic receives the event. This is loose coupling -- the sender does not know who (if anyone) receives the message. The shell also uses IPC_PEER events internally for state operations, service coordination, and configuration commands.
 
 ## API Surface
 
@@ -52,18 +52,6 @@ Topics use a prefix convention to signal direction and scope:
 
 These conventions are advisory. The shell routes by NIP-01 filter match, not by prefix parsing. A napplet can subscribe to any topic regardless of prefix.
 
-### Built-in Topics
-
-The `@napplet/core` package exports a `TOPICS` constant with well-known topic strings. See `packages/core/src/topics.ts` for the full list. Examples:
-
-| Topic | Direction | Purpose |
-|-------|-----------|---------|
-| `auth:identity-changed` | shell -> napplet | User identity changed |
-| `shell:state-get` | napplet -> shell | Read scoped state value |
-| `napplet:state-response` | shell -> napplet | State operation result |
-| `shell:audio-register` | napplet -> shell | Register audio source |
-| `stream:channel-switch` | napplet <-> napplet | Switch active stream channel |
-
 ## Event Kinds
 
 | Kind | Name | Direction | Description |
@@ -98,8 +86,3 @@ The event is signed with the napplet's delegated session key before posting to t
 ## Relationship to NUB-PIPES
 
 NUB-IPC is for loose-coupled, topic-based pub/sub with per-message authentication. NUB-PIPES is for tight-coupled, point-to-point connections with auth-on-open semantics. Both coexist in the napplet protocol: IPC for infrequent coordination (UI commands, state sync, configuration), pipes for sustained data streams (real-time collaboration, media).
-
-## Implementations
-
-- [@napplet/shim](https://github.com/sandwichfarm/napplet) -- napplet-side (`emit()` and `on()` installed on `window.napplet.ipc`)
-- [@napplet/shell](https://github.com/sandwichfarm/napplet) -- shell-side (IPC_PEER routing via ShellBridge subscription dispatch)
