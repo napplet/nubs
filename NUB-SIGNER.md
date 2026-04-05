@@ -55,12 +55,16 @@ This is the standard NIP-07 interface. NUB-SIGNER does not extend or modify it.
   (0: metadata, 3: contacts, 5: deletion, 10002: relay list).
 - The shell MUST NOT expose the user's private key material to the napplet.
 
-## Transport
+## Event Kinds
 
-Signer operations are transported via postMessage between the napplet iframe
-and the shell. Each request includes a correlation ID; the shell responds with
-a matching ID so the napplet can resolve the correct Promise. The internal
-message format is an implementation detail of the shell.
+The NIP-07 interface is proxied via postMessage using signed events. Each
+`window.nostr` method call is serialized as a request event; the shell
+forwards it to the user's signer and returns the result as a response event.
+
+| Kind | Name | Direction | Description |
+|------|------|-----------|-------------|
+| 29001 | Signer request | napplet -> shell | `method` tag identifies the operation (e.g., `signEvent`, `getPublicKey`). `id` tag for correlation. `param` tags carry method arguments. |
+| 29002 | Signer response | shell -> napplet | `id` tag matching request. `result` tag with JSON-serialized return value, or `error` tag with reason string. |
 
 ## Security Considerations
 
