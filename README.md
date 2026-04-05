@@ -59,5 +59,3 @@ NIP-style informal process:
 ## References
 
 - Core protocol: [NIP-5D](../NIP-5D.md)
-- Reference implementation: [@napplet packages](https://github.com/sandwichfarm/napplet)
-- Reference shell: [hyprgate](https://github.com/sandwichfarm/hyprgate)
