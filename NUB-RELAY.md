@@ -80,10 +80,15 @@ events.
 
 ## Event Kinds
 
-This interface uses NIP-01 wire format verbs (REQ, EVENT, CLOSE, EOSE, OK,
-CLOSED, NOTICE) which are not custom event kinds. Scoped relay operations are
-an implementation detail of the shell and do not define additional event kinds
-at this layer.
+This interface primarily uses NIP-01 wire format verbs (REQ, EVENT, CLOSE,
+EOSE, OK, CLOSED, NOTICE) which are not custom event kinds. For scoped relay
+operations, it uses:
+
+| Kind | Name | Direction | Description |
+|------|------|-----------|-------------|
+| 29001 | Scoped relay connect | napplet -> shell | `t` tag: `shell:relay-scoped-connect`. Includes `url`, `group`, `sub-id`, `filters` tags. |
+| 29001 | Scoped relay close | napplet -> shell | `t` tag: `shell:relay-scoped-close`. Tears down the scoped relay connection. |
+| 29001 | Scoped relay publish | napplet -> shell | `t` tag: `shell:relay-scoped-publish`. Includes `event` tag with JSON-serialized signed event. |
 
 ## Security Considerations
 
