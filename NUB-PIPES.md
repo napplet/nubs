@@ -12,9 +12,9 @@ Authenticated Point-to-Point Connections
 
 ## Description
 
-NUB-PIPES provides authenticated, persistent, bidirectional connections between napplets. Unlike NUB-IPC (topic-based pub/sub with per-message signing), pipes authenticate once on open and then exchange messages with minimal overhead. The shell mediates all pipe operations -- napplets cannot connect directly due to iframe sandbox restrictions.
+NUB-PIPES provides authenticated, persistent, bidirectional connections between napplets. Unlike NUB-IFC (topic-based pub/sub with per-message signing), pipes authenticate once on open and then exchange messages with minimal overhead. The shell mediates all pipe operations -- napplets cannot connect directly due to iframe sandbox restrictions.
 
-Pipes are designed for high-frequency communication where per-message NIP-01 event signing (as in NUB-IPC) creates unacceptable overhead. A kind 29003 IPC message costs ~500 bytes of envelope plus Schnorr signature computation. A pipe message costs ~30 bytes. Use NUB-IPC for infrequent coordination; use NUB-PIPES for data streams, real-time sync, and command channels.
+Pipes are designed for high-frequency communication where per-message NIP-01 event signing (as in NUB-IFC) creates unacceptable overhead. A kind 29003 IFC message costs ~500 bytes of envelope plus Schnorr signature computation. A pipe message costs ~30 bytes. Use NUB-IFC for infrequent coordination; use NUB-PIPES for data streams, real-time sync, and command channels.
 
 ## API Surface
 
@@ -64,7 +64,7 @@ interface Subscription {
 
 - **`onOpen(callback)`** listens for incoming pipe open requests from other napplets. The callback receives a `PipeHandle` that is already connected (PIPE_ACK has been sent by the shell on the callee's behalf). The callee can immediately call `pipe.send()` and `pipe.on()`.
 
-- **`broadcast(payload, group?)`** sends a message to all open pipes. If `group` is specified, only pipes with a matching `name` receive it. Passing `"*"` broadcasts to all open pipes regardless of name. The sender is excluded from delivery (matching NUB-IPC sender-exclusion precedent).
+- **`broadcast(payload, group?)`** sends a message to all open pipes. If `group` is specified, only pipes with a matching `name` receive it. Passing `"*"` broadcasts to all open pipes regardless of name. The sender is excluded from delivery (matching NUB-IFC sender-exclusion precedent).
 
 - **`PipeHandle.send(payload)`** sends a JSON-serializable value to the peer. The shell forwards the payload without interpretation.
 
@@ -164,7 +164,7 @@ Sent by a napplet to broadcast to multiple open pipes.
 - `group_or_*` (string): Pipe name to target, or `"*"` for all open pipes.
 - `payload` (any JSON-serializable value).
 
-The shell delivers broadcast as individual `["PIPE", <pipe_id>, <payload>]` messages to each recipient. The sender is excluded from delivery (matching NUB-IPC sender-exclusion precedent).
+The shell delivers broadcast as individual `["PIPE", <pipe_id>, <payload>]` messages to each recipient. The sender is excluded from delivery (matching NUB-IFC sender-exclusion precedent).
 
 ## Pipe Lifecycle
 
@@ -250,7 +250,7 @@ Pipe control messages (PIPE_OPEN, PIPE_ACK, PIPE_CLOSE, PIPE_CLOSED, PIPE_ERROR)
 
 - **Shell as sole broker.** Napplets cannot connect directly. Sandboxed iframes without `allow-same-origin` cannot reference each other's `contentWindow` to transfer MessagePorts. The shell mediates all pipe setup and teardown.
 
-- **Auth-on-open.** Pipe messages after PIPE_ACK are NOT individually signed. Trust is established by the AUTH handshake (REGISTER/IDENTITY/AUTH) plus `MessageEvent.source` verification. A compromised browser extension could forge messages on an open pipe -- this is an accepted trust boundary, the same as NUB-IPC.
+- **Auth-on-open.** Pipe messages after PIPE_ACK are NOT individually signed. Trust is established by the AUTH handshake (REGISTER/IDENTITY/AUTH) plus `MessageEvent.source` verification. A compromised browser extension could forge messages on an open pipe -- this is an accepted trust boundary, the same as NUB-IFC.
 
 - **Sender verification.** The shell identifies pipe message senders via `MessageEvent.source`, which is an unforgeable `Window` reference set by the browser. This prevents cross-pipe spoofing.
 
@@ -262,9 +262,9 @@ Pipe control messages (PIPE_OPEN, PIPE_ACK, PIPE_CLOSE, PIPE_CLOSED, PIPE_ERROR)
 
 - **Pipe ID opacity.** The shell assigns pipe IDs using opaque identifiers. Napplets cannot enumerate or guess other napplets' pipe IDs. This prevents pipe hijacking.
 
-## Comparison with NUB-IPC
+## Comparison with NUB-IFC
 
-| Aspect | NUB-IPC (pub/sub) | NUB-PIPES (point-to-point) |
+| Aspect | NUB-IFC (pub/sub) | NUB-PIPES (point-to-point) |
 |--------|-------------------|---------------------------|
 | **Addressing** | Topic-based (`#t` tag filter matching) | dTag targeting + shell-assigned pipe ID |
 | **Auth** | Per-message (full NIP-01 event with sig) | Once on open (reuses AUTH session) |
