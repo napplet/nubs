@@ -3,7 +3,7 @@ NUB: Napplet Unified Blueprints
 
 NUBs extend [NIP-5D](../NIP-5D.md) with interface and protocol specifications
 for the napplet ecosystem. The core NIP defines transport, authentication, and
-security. Everything else -- relay access, storage, signing, IPC, pipes, message
+security. Everything else such as relay access, storage, signing, IPC, pipes, message
 protocols is a NUB.
 
 ## Two Tracks
@@ -11,7 +11,7 @@ protocols is a NUB.
 ### NUB-WORD (Interface Specs)
 
 Named by a single uppercase word. One canonical spec per name. Defines
-shell-provided API contracts -- what shows up on `window.napplet.*` or
+shell-provided API contracts, what shows up on `window.napplet.*` or
 `window.nostr` or `window.nostrdb`. The shell implements these; napplets
 consume them. Discovery: `shell.supports("NUB-RELAY")`.
 
@@ -27,7 +27,7 @@ consume them. Discovery: `shell.supports("NUB-RELAY")`.
 ### NUB-NN (Message Protocol Specs)
 
 Numbered sequentially (NUB-01, NUB-02, etc.). Multiple competing specs allowed
-per domain. Defines event semantics -- what napplets agree on with each other.
+per domain. Defines event semantics - what napplets agree on with each other.
 Napplets negotiate via `shell.supports("NUB-RELAY", "NUB-02")`. Example domains:
 feed rendering, chat, collaborative editing.
 
