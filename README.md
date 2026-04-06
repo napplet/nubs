@@ -4,7 +4,7 @@ NUB: Napplet Unified Blueprints
 NUBs extend [NIP-5D](../NIP-5D.md) with interface and protocol specifications
 for the napplet ecosystem. The core NIP defines transport, authentication, and
 security. Everything else -- relay access, storage, signing, IPC, pipes, message
-protocols -- is a NUB.
+protocols is a NUB.
 
 ## Two Tracks
 
