@@ -34,7 +34,7 @@ feed rendering, chat, collaborative editing.
 ## Boundary Rule
 
 An interface (NUB-WORD) is **shell-provided** AND defines an **API surface**. A
-protocol (NUB-NN) is **napplet-agreed** AND defines **event semantics**. Both
+protocol (NUB-NN) is **napplet-agreed** AND defines **message semantics**. Both
 criteria must apply. Edge cases are judged pragmatically by the maintainer.
 
 ## Governance
