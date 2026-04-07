@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] ~~**Phase 1: Foundation**~~ - SPEC.md written by external agent (complete)
 - [ ] **Phase 2: NUB-SIGNER Demotion** - Close NUB-SIGNER PR entirely, resolve IFC/IPC naming
-- [ ] **Phase 3: NUB-STORAGE Rewrite** - Simplest spec rewrite; validates new wire format in practice
+- [x] **Phase 3: NUB-STORAGE Rewrite** - Simplest spec rewrite; validates new wire format in practice (completed 2026-04-07)
 - [ ] **Phase 4: NUB-RELAY Rewrite** - Highest-impact rewrite; publish via typed messages, no crypto in napplet API
 - [ ] **Phase 5: NUB-NOSTRDB Rewrite** - Event caching interface aligned with new wire format
 - [ ] **Phase 6: NUB-IFC Rewrite** - Most prose-heavy; sender verification model updated
@@ -48,9 +48,9 @@ Plans:
   1. NUB-STORAGE defines `storage.*` message types (e.g., `storage.get`, `storage.set`, `storage.remove`, `storage.keys`) with typed payloads per SPEC.md wire format
   2. Shell Behavior section describes composite key scoping and any internal event mechanics without exposing them to napplet authors
   3. No reference to signing, keypairs, pubkeys, kind numbers, or cryptographic operations appears in napplet-facing sections
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
-- [ ] 03-01-PLAN.md — Rewrite NUB-STORAGE.md wire format and update PR #3
+- [x] 03-01-PLAN.md — Rewrite NUB-STORAGE.md wire format and update PR #3
 
 ### Phase 4: NUB-RELAY Rewrite
 **Goal**: NUB-RELAY is fully rewritten using `relay.*` message types — the central interface of the milestone — with no crypto in the napplet-visible API
@@ -105,7 +105,7 @@ Phases execute in numeric order: 1 (done) → 2 → 3 → 4 → 5 → 6 → 7
 |-------|----------------|--------|-----------|
 | 1. Foundation | -- | Complete | 2026-04-07 |
 | 2. NUB-SIGNER Demotion | 0/1 | Not started | - |
-| 3. NUB-STORAGE Rewrite | 0/? | Not started | - |
+| 3. NUB-STORAGE Rewrite | 1/1 | Complete   | 2026-04-07 |
 | 4. NUB-RELAY Rewrite | 0/? | Not started | - |
 | 5. NUB-NOSTRDB Rewrite | 0/? | Not started | - |
 | 6. NUB-IFC Rewrite | 0/? | Not started | - |

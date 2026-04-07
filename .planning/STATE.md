@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v0.1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Completed 02-nub-signer-demotion/02-01-PLAN.md
-last_updated: "2026-04-07T10:40:01.004Z"
+stopped_at: Completed 03-nub-storage-rewrite/03-01-PLAN.md
+last_updated: "2026-04-07T10:51:38.843Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 7
-  completed_phases: 1
-  total_plans: 1
-  completed_plans: 1
+  completed_phases: 2
+  total_plans: 2
+  completed_plans: 2
   percent: 14
 ---
 
@@ -21,12 +21,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-07)
 
 **Core value:** Napplet authors never touch crypto. They subscribe(), publish(), query().
-**Current focus:** Phase 02 — nub-signer-demotion
+**Current focus:** Phase 03 — nub-storage-rewrite
 
 ## Current Position
 
-Phase: 3
-Plan: Not started
+Phase: 03 (nub-storage-rewrite) — EXECUTING
+Plan: 1 of 1
 Status: Phase complete — ready for verification
 Last activity: 2026-04-07
 
@@ -53,6 +53,7 @@ Progress: [█░░░░░░░░░] 14%
 
 *Updated after each plan completion*
 | Phase 02-nub-signer-demotion P01 | 2 | 2 tasks | 2 files |
+| Phase 03-nub-storage-rewrite P01 | 15 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -63,6 +64,7 @@ Progress: [█░░░░░░░░░] 14%
 - Napplets have no access to `window.nostr` — all signing proxied through shell
 - [Phase 02-nub-signer-demotion]: NUB-SIGNER closed entirely — NIP-07 window.nostr is a SPEC.md core requirement (shells MUST provide it), so there is nothing left for a separate spec to define
 - [Phase 02-nub-signer-demotion]: NUB-IFC is the canonical name for inter-frame communication — all NUB-IPC references replaced in README.md and CLAUDE.md
+- [Phase 03-nub-storage-rewrite]: storage.* message types mirror API method names; errors are inline in result messages via error field; shell behavior describes composite key scoping outcome without prescribing internal key format
 
 ### Pending Todos
 
@@ -75,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T10:36:50.476Z
-Stopped at: Completed 02-nub-signer-demotion/02-01-PLAN.md
+Last session: 2026-04-07T10:51:38.841Z
+Stopped at: Completed 03-nub-storage-rewrite/03-01-PLAN.md
 Resume file: None
