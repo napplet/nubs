@@ -73,7 +73,9 @@ Plans:
   1. NUB-NOSTRDB defines `nostrdb.*` message types for add, query, subscribe operations using SPEC.md wire format
   2. The `add` operation documents that events are externally-authored (received from relay subscriptions), not napplet-signed
   3. No napplet-authored signing operation appears in the napplet-facing sections of the spec
-**Plans**: TBD
+**Plans:** 1 plan
+Plans:
+- [ ] 05-01-PLAN.md — Rewrite NUB-NOSTRDB.md wire format and update PR #4
 
 ### Phase 6: NUB-IFC Rewrite
 **Goal**: NUB-IFC is fully rewritten using `ifc.*` message types — inter-frame communication without signed event wrappers, sender verification via shell's `MessageEvent.source` identity mapping
@@ -109,6 +111,6 @@ Phases execute in numeric order: 1 (done) → 2 → 3 → 4 → 5 → 6 → 7
 | 2. NUB-SIGNER Demotion | 0/1 | Not started | - |
 | 3. NUB-STORAGE Rewrite | 1/1 | Complete   | 2026-04-07 |
 | 4. NUB-RELAY Rewrite | 1/1 | Complete   | 2026-04-07 |
-| 5. NUB-NOSTRDB Rewrite | 0/? | Not started | - |
+| 5. NUB-NOSTRDB Rewrite | 0/1 | Not started | - |
 | 6. NUB-IFC Rewrite | 0/? | Not started | - |
 | 7. Pipes, Security Audit & Governance | 0/? | Not started | - |
