@@ -85,7 +85,9 @@ Plans:
   1. NUB-IFC defines `ifc.*` message types (e.g., `ifc.emit`, `ifc.on`) with no signing or cryptographic operations in napplet-facing sections
   2. Shell Behavior section documents sender verification via `MessageEvent.source` → napplet identity mapping (per SPEC.md)
   3. Security Considerations describes sender identity as shell-enforced — no per-message Schnorr signing as napplet responsibility
-**Plans**: TBD
+**Plans:** 1 plan
+Plans:
+- [ ] 06-01-PLAN.md — Rewrite NUB-IFC.md wire format and update PR #5
 
 ### Phase 7: Pipes, Security Audit & Governance
 **Goal**: NUB-PIPES is rewritten as a final validation of the new spec structure; cross-spec Security Considerations audit confirms consistency; templates and registry updated
@@ -111,6 +113,6 @@ Phases execute in numeric order: 1 (done) → 2 → 3 → 4 → 5 → 6 → 7
 | 2. NUB-SIGNER Demotion | 0/1 | Not started | - |
 | 3. NUB-STORAGE Rewrite | 1/1 | Complete   | 2026-04-07 |
 | 4. NUB-RELAY Rewrite | 1/1 | Complete   | 2026-04-07 |
-| 5. NUB-NOSTRDB Rewrite | 0/1 | Not started | - |
-| 6. NUB-IFC Rewrite | 0/? | Not started | - |
+| 5. NUB-NOSTRDB Rewrite | 1/1 | Complete   | 2026-04-07 |
+| 6. NUB-IFC Rewrite | 0/1 | Planned | - |
 | 7. Pipes, Security Audit & Governance | 0/? | Not started | - |
