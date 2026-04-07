@@ -13,11 +13,11 @@ protocols -- is a NUB.
 Named by a single uppercase word. One canonical spec per name. Defines
 shell-provided API contracts, what shows up on `window.napplet.*` or
 `window.nostr` or `window.nostrdb`. The shell implements these; napplets
-consume them. Discovery: `shell.supports("NUB-RELAY")`.
+consume them. Discovery: `shell.supports("relay")`.
 
 | NUB ID | Namespace | Description | Status |
 |--------|-----------|-------------|--------|
-| [NUB-RELAY](https://github.com/napplet/nubs/pull/2) | `window.napplet.relay` | NIP-01 relay proxy | Draft |
+| [NUB-RELAY](https://github.com/napplet/nubs/pull/2) | `window.napplet.relay` | Relay proxy | Draft |
 | [NUB-STORAGE](https://github.com/napplet/nubs/pull/3) | `window.napplet.storage` | Scoped key-value storage | Draft |
 | [NUB-NOSTRDB](https://github.com/napplet/nubs/pull/4) | `window.nostrdb` | Local event database | Draft |
 | [NUB-IFC](https://github.com/napplet/nubs/pull/5) | `window.napplet.ifc` | Inter-frame communication | Draft |
@@ -26,7 +26,7 @@ consume them. Discovery: `shell.supports("NUB-RELAY")`.
 
 Numbered sequentially (NUB-01, NUB-02, etc.). Multiple competing specs allowed
 per domain. Defines event semantics - what napplets agree on with each other.
-Napplets negotiate via `shell.supports("NUB-RELAY", "NUB-02")`. Example domains:
+Napplets negotiate via `shell.supports("relay", "NUB-02")`. Example domains:
 feed rendering, chat, collaborative editing.
 
 ## Boundary Rule
