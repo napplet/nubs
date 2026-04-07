@@ -32,7 +32,7 @@ interface NappletIfc {
 
 interface IfcEvent {
   topic: string;
-  sender: string;    // sender dTag (napplet type identifier, per SPEC.md)
+  sender: string;    // sender dTag (napplet type identifier, per NIP-5D)
   payload: unknown;
 }
 
@@ -60,7 +60,7 @@ interface ChannelInfo {
 }
 ```
 
-**`emit(topic, payload?)`** — Broadcasts a message to all napplets subscribed to the given topic. Fire-and-forget — there is no delivery confirmation. The shell identifies the sender via `MessageEvent.source` (per SPEC.md) and includes the sender's `dTag` in delivered events.
+**`emit(topic, payload?)`** — Broadcasts a message to all napplets subscribed to the given topic. Fire-and-forget — there is no delivery confirmation. The shell identifies the sender via `MessageEvent.source` (per NIP-5D) and includes the sender's `dTag` in delivered events.
 
 **`on(topic, callback)`** — Subscribes to messages on a topic. The callback receives an `IfcEvent` with the topic, sender `dTag`, and payload. Returns a `Subscription` handle with a `close()` method to unsubscribe. Multiple subscriptions to the same topic are independent.
 
@@ -87,7 +87,7 @@ IFC operations use the NIP-5D wire format (`{ "type": "domain.action", ...payloa
 | `ifc.emit` | napplet -> shell | `topic`, `payload`? |
 | `ifc.subscribe` | napplet -> shell | `id`, `topic` |
 | `ifc.subscribe.result` | shell -> napplet | `id` |
-| `ifc.unsubscribe` | napplet -> shell | `id`, `topic` |
+| `ifc.unsubscribe` | napplet -> shell | `topic` |
 | `ifc.event` | shell -> napplet | `topic`, `sender` (dTag), `payload`? |
 
 Key design notes:
@@ -95,8 +95,8 @@ Key design notes:
 - `ifc.emit` has no `id` field — it is fire-and-forget with no acknowledgment.
 - `ifc.subscribe` uses `id` for correlation so the shim can confirm the subscription was registered.
 - `ifc.subscribe.result` confirms registration by echoing the `id`.
-- `ifc.unsubscribe` uses `id` for correlation.
-- `ifc.event` has no `id` field — it is a shell-initiated delivery identified by `topic` and `sender` (the emitting napplet's `dTag` string per SPEC.md).
+- `ifc.unsubscribe` is fire-and-forget (no `id`, no result message).
+- `ifc.event` has no `id` field — it is a shell-initiated delivery identified by `topic` and `sender` (the emitting napplet's `dTag` string per NIP-5D).
 
 ### Channels
 
@@ -142,7 +142,7 @@ No response — fire-and-forget.
 
 **Unsubscribe:**
 ```
--> { "type": "ifc.unsubscribe", "id": "b2", "topic": "profile:open" }
+-> { "type": "ifc.unsubscribe", "topic": "profile:open" }
 ```
 
 **Open channel:**
@@ -216,7 +216,7 @@ These conventions are advisory. The shell routes by topic match, not by prefix p
 ### Topic routing
 
 - The shell MUST route `ifc.emit` messages to all napplets subscribed to the matching topic.
-- The shell MUST identify the sender via `MessageEvent.source` and include the sender's `dTag` in delivered `ifc.event` messages (per SPEC.md identity model).
+- The shell MUST identify the sender via `MessageEvent.source` and include the sender's `dTag` in delivered `ifc.event` messages (per NIP-5D identity model).
 - The shell MUST NOT deliver `ifc.event` back to the emitting napplet (sender exclusion).
 - The shell MUST respond to `ifc.subscribe` with `ifc.subscribe.result` carrying the same `id`.
 - The shell MUST honor `ifc.unsubscribe` by removing the subscription for that topic.
@@ -249,7 +249,7 @@ Both are part of the same `ifc` namespace and share the NIP-5D wire format. A na
 
 ## Security Considerations
 
-Sender identity is shell-enforced via `MessageEvent.source` mapping to napplet identity (per SPEC.md). There is no per-message signing — the shell's sender identification is the trust boundary. `MessageEvent.source` is unforgeable within the same browsing context.
+Sender identity is shell-enforced via `MessageEvent.source` mapping to napplet identity (per NIP-5D). There is no per-message signing — the shell's sender identification is the trust boundary. `MessageEvent.source` is unforgeable within the same browsing context.
 
 ### Topics
 
