@@ -75,7 +75,7 @@ Plans:
   3. No napplet-authored signing operation appears in the napplet-facing sections of the spec
 **Plans:** 1 plan
 Plans:
-- [ ] 05-01-PLAN.md — Rewrite NUB-NOSTRDB.md wire format and update PR #4
+- [x] 05-01-PLAN.md — Rewrite NUB-NOSTRDB.md wire format and update PR #4
 
 ### Phase 6: NUB-IFC Rewrite
 **Goal**: NUB-IFC is fully rewritten using `ifc.*` message types — inter-frame communication without signed event wrappers, sender verification via shell's `MessageEvent.source` identity mapping

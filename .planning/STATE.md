@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v0.1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Completed 04-nub-relay-rewrite/04-01-PLAN.md
-last_updated: "2026-04-07T11:10:53.774Z"
+stopped_at: Completed 05-nub-nostrdb-rewrite/05-01-PLAN.md
+last_updated: "2026-04-07T11:21:11.460Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 7
-  completed_phases: 3
-  total_plans: 3
-  completed_plans: 3
+  completed_phases: 4
+  total_plans: 5
+  completed_plans: 4
   percent: 14
 ---
 
@@ -55,6 +55,7 @@ Progress: [█░░░░░░░░░] 14%
 | Phase 02-nub-signer-demotion P01 | 2 | 2 tasks | 2 files |
 | Phase 03-nub-storage-rewrite P01 | 15 | 2 tasks | 1 files |
 | Phase 04-nub-relay-rewrite P01 | 2 | 2 tasks | 1 files |
+| Phase 05-nub-nostrdb-rewrite P01 | 2 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,8 @@ Progress: [█░░░░░░░░░] 14%
 - [Phase 04-nub-relay-rewrite]: relay.publish accepts a signed NostrEvent only — napplets sign via window.nostr.signEvent(template) before publishing, one path only (D-07)
 - [Phase 04-nub-relay-rewrite]: subId field distinguishes subscription-scoped messages from request/result pairs (which use id)
 - [Phase 04-nub-relay-rewrite]: Shell MUST verify event signatures before relay broadcast — invalid signatures rejected with relay.publish.result ok:false
+- [Phase 05-nub-nostrdb-rewrite]: nostrdb.sub.event and nostrdb.sub.eose used for subscription push to disambiguate from nostrdb.event by-id lookup
+- [Phase 05-nub-nostrdb-rewrite]: nostrdb.add documents externally-authored pattern: napplets do NOT sign events, they cache relay.event-received events
 
 ### Pending Todos
 
@@ -81,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T11:08:06.040Z
-Stopped at: Completed 04-nub-relay-rewrite/04-01-PLAN.md
+Last session: 2026-04-07T11:21:11.458Z
+Stopped at: Completed 05-nub-nostrdb-rewrite/05-01-PLAN.md
 Resume file: None
