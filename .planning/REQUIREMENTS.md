@@ -18,7 +18,7 @@ Requirements for initial spec simplification. Each maps to roadmap phases.
 
 ### Interface Specs
 
-- [ ] **SPEC-01**: NUB-RELAY rewritten — `publish(template)` is self-contained, no `signEvent()` in napplet path, shell signs internally
+- [x] **SPEC-01**: NUB-RELAY rewritten — `publish(template)` is self-contained, no `signEvent()` in napplet path, shell signs internally
 - [x] **SPEC-02**: NUB-STORAGE rewritten — crypto implementation details removed from napplet-facing sections
 - [x] **SPEC-03**: NUB-SIGNER reframed as runtime-internal interface with optional user-consent-only API surface
 - [ ] **SPEC-04**: NUB-NOSTRDB rewritten — passthrough exception applied to `add()`, no napplet-authored signatures
@@ -62,7 +62,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FOUND-04 | Phase 1 | Complete |
 | FOUND-05 | Phase 1 | Complete |
 | FOUND-06 | Phase 1 | Complete |
-| SPEC-01 | Phase 4 | Pending |
+| SPEC-01 | Phase 4 | Complete |
 | SPEC-02 | Phase 3 | Complete |
 | SPEC-03 | Phase 2 | Complete |
 | SPEC-04 | Phase 5 | Pending |

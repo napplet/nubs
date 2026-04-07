@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] ~~**Phase 1: Foundation**~~ - SPEC.md written by external agent (complete)
 - [ ] **Phase 2: NUB-SIGNER Demotion** - Close NUB-SIGNER PR entirely, resolve IFC/IPC naming
 - [x] **Phase 3: NUB-STORAGE Rewrite** - Simplest spec rewrite; validates new wire format in practice (completed 2026-04-07)
-- [ ] **Phase 4: NUB-RELAY Rewrite** - Highest-impact rewrite; publish via typed messages, no crypto in napplet API
+- [x] **Phase 4: NUB-RELAY Rewrite** - Highest-impact rewrite; publish via typed messages, no crypto in napplet API (completed 2026-04-07)
 - [ ] **Phase 5: NUB-NOSTRDB Rewrite** - Event caching interface aligned with new wire format
 - [ ] **Phase 6: NUB-IFC Rewrite** - Most prose-heavy; sender verification model updated
 - [ ] **Phase 7: Pipes, Security Audit & Governance** - PIPES rewrite, cross-spec security audit, templates and registry
@@ -61,9 +61,9 @@ Plans:
   2. Shell Behavior section describes how the runtime forwards signed events to relays and delivers incoming events — this detail is not visible to napplets beyond the message types
   3. NUB-RELAY does not reference NUB-SIGNER as a napplet-visible dependency
   4. `subscribe` and `query` result payloads are defined with clear types
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
-- [ ] 04-01-PLAN.md — Rewrite NUB-RELAY.md wire format and update PR #2
+- [x] 04-01-PLAN.md — Rewrite NUB-RELAY.md wire format and update PR #2
 
 ### Phase 5: NUB-NOSTRDB Rewrite
 **Goal**: NUB-NOSTRDB is fully rewritten using `nostrdb.*` message types — napplets can cache and query events received from subscriptions
@@ -108,7 +108,7 @@ Phases execute in numeric order: 1 (done) → 2 → 3 → 4 → 5 → 6 → 7
 | 1. Foundation | -- | Complete | 2026-04-07 |
 | 2. NUB-SIGNER Demotion | 0/1 | Not started | - |
 | 3. NUB-STORAGE Rewrite | 1/1 | Complete   | 2026-04-07 |
-| 4. NUB-RELAY Rewrite | 0/1 | Not started | - |
+| 4. NUB-RELAY Rewrite | 1/1 | Complete   | 2026-04-07 |
 | 5. NUB-NOSTRDB Rewrite | 0/? | Not started | - |
 | 6. NUB-IFC Rewrite | 0/? | Not started | - |
 | 7. Pipes, Security Audit & Governance | 0/? | Not started | - |
