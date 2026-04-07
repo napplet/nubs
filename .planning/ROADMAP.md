@@ -48,7 +48,9 @@ Plans:
   1. NUB-STORAGE defines `storage.*` message types (e.g., `storage.get`, `storage.set`, `storage.remove`, `storage.keys`) with typed payloads per SPEC.md wire format
   2. Shell Behavior section describes composite key scoping and any internal event mechanics without exposing them to napplet authors
   3. No reference to signing, keypairs, pubkeys, kind numbers, or cryptographic operations appears in napplet-facing sections
-**Plans**: TBD
+**Plans:** 1 plan
+Plans:
+- [ ] 03-01-PLAN.md — Rewrite NUB-STORAGE.md wire format and update PR #3
 
 ### Phase 4: NUB-RELAY Rewrite
 **Goal**: NUB-RELAY is fully rewritten using `relay.*` message types — the central interface of the milestone — with no crypto in the napplet-visible API
