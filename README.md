@@ -3,7 +3,7 @@ NUB: Napplet Unified Blueprints
 
 NUBs extend [NIP-5D](../NIP-5D.md) with interface and protocol specifications
 for the napplet ecosystem. The core NIP defines transport, authentication, and
-security. Everything else -- relay access, storage, signing, IFC, pipes, message
+security. Everything else -- relay access, storage, signing, IFC, message
 protocols -- is a NUB.
 
 ## Two Tracks
@@ -21,7 +21,6 @@ consume them. Discovery: `shell.supports("NUB-RELAY")`.
 | [NUB-STORAGE](https://github.com/napplet/nubs/pull/3) | `window.napplet.storage` | Scoped key-value storage | Draft |
 | [NUB-NOSTRDB](https://github.com/napplet/nubs/pull/4) | `window.nostrdb` | Local event database | Draft |
 | [NUB-IFC](https://github.com/napplet/nubs/pull/5) | `window.napplet.ifc` | Inter-frame communication | Draft |
-| [NUB-PIPES](https://github.com/napplet/nubs/pull/6) | `window.napplet.pipes` | Authenticated point-to-point connections | Draft |
 
 ### NUB-NN (Message Protocol Specs)
 

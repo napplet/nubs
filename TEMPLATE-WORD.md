@@ -7,38 +7,65 @@ NUB-{NAME}
 `draft`
 
 **NUB ID:** NUB-{NAME}
-**Namespace:** `window.napplet.{name}` (or `window.nostr`, `window.nostrdb`)
-**Discovery:** `shell.supports("NUB-{NAME}")`
+**Namespace:** `window.napplet.{name}`
+**Discovery:** `shell.supports("{name}")`
 
 ## Description
 
-{One paragraph: what this interface provides and why.}
+{One paragraph: what this interface provides and why a napplet needs it. State what the shell provides and what the napplet consumes.}
 
 ## API Surface
 
-{Method signatures with brief descriptions. Use markdown code blocks for types.}
+{SDK-level method signatures. These are the high-level operations napplets call. Each method corresponds to one or more wire protocol messages.}
 
-```
-interface {Name} {
+```typescript
+interface Napplet{Name} {
   method(param: type): ReturnType;
 }
 ```
 
+{Brief description of each method: what it does, what it returns, error conditions.}
+
+## Wire Protocol
+
+{name}.* messages use the NIP-5D wire format (`{ "type": "domain.action", ...payload }`).
+
+| Type | Direction | Payload fields |
+|------|-----------|----------------|
+| `{name}.action` | napplet -> shell | `id`, {fields} |
+| `{name}.action.result` | shell -> napplet | `id`, {fields} |
+
+Key design notes:
+- Request/result pairs use `id` for correlation.
+- Fire-and-forget messages have no `id` field.
+- Shell-initiated deliveries use domain-specific routing fields.
+
+### Examples
+
+**{Action name}:**
+```
+-> { "type": "{name}.action", "id": "a1", {fields} }
+<- { "type": "{name}.action.result", "id": "a1", {fields} }
+```
+
+### Error Handling
+
+{How errors are reported -- typically an `error` field in result messages.}
+
 ## Shell Behavior
 
-{What the shell MUST and MAY do when providing this interface.}
-
-## Event Kinds
-
-{If this interface uses postMessage bus kinds, define them here.}
-
-| Kind | Name | Direction | Description |
-|------|------|-----------|-------------|
-| {kind} | {NAME} | {napplet->shell / shell->napplet} | {description} |
+- The shell MUST {primary obligation}.
+- The shell MUST respond to every request with a result message carrying the same `id`.
+- The shell MAY {optional behavior}.
+- The shell MAY enforce ACL checks on {name} capabilities.
 
 ## Security Considerations
 
-{Interface-specific security requirements.}
+{Interface-specific security requirements. The shell/runtime is the subject of MUST clauses for any crypto or trust operations -- napplets do not sign or verify.}
+
+- {Isolation guarantees}
+- {ACL considerations}
+- {Trust boundaries}
 
 ## Implementations
 
