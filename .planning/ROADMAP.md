@@ -13,7 +13,7 @@ Six phases that rewrite the 6 existing draft NUB interface specs to align with t
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] ~~**Phase 1: Foundation**~~ - SPEC.md written by external agent (complete)
-- [ ] **Phase 2: NUB-SIGNER Demotion** - Reframe SIGNER as runtime-internal and resolve IFC/IPC naming
+- [ ] **Phase 2: NUB-SIGNER Demotion** - Close NUB-SIGNER PR entirely, resolve IFC/IPC naming
 - [ ] **Phase 3: NUB-STORAGE Rewrite** - Simplest spec rewrite; validates new wire format in practice
 - [ ] **Phase 4: NUB-RELAY Rewrite** - Highest-impact rewrite; publish via typed messages, no crypto in napplet API
 - [ ] **Phase 5: NUB-NOSTRDB Rewrite** - Event caching interface aligned with new wire format
@@ -29,14 +29,16 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Notes**: SPEC.md defines `{ "type": "domain.action", ...payload }` wire format instead of NIP-01 events. This is a larger architectural shift than originally planned — kind numbers are no longer in the wire protocol, `EventTemplate` concept replaced by typed message payloads, identity via `MessageEvent.source`. All subsequent phases must use this wire format.
 
 ### Phase 2: NUB-SIGNER Demotion
-**Goal**: NUB-SIGNER is rewritten as a shell implementation guide — not a napplet-callable interface — and the IPC/IFC naming is resolved so all other spec rewrites reference the correct canonical name
+**Goal**: NUB-SIGNER PR is closed entirely (NIP-07 `window.nostr` is a core SPEC.md requirement, nothing left for a separate spec) and the IPC/IFC naming is resolved so all other spec rewrites reference the correct canonical name NUB-IFC
 **Depends on**: Phase 1 (complete)
 **Requirements**: SPEC-03, SPEC-07
+**Plans:** 1 plan
+Plans:
+- [ ] 02-01-PLAN.md — Close NUB-SIGNER PR, delete branch, update README.md and CLAUDE.md with NUB-IFC naming
 **Success Criteria** (what must be TRUE):
-  1. NUB-SIGNER spec describes signing as shell-internal behavior; napplets have no signing API (consistent with SPEC.md: napplets have no access to `window.nostr`)
-  2. NUB-SIGNER is marked as a runtime-internal interface in the spec file and in the README registry table
-  3. A single canonical name (NUB-IFC) is used consistently in the README registry and any existing spec file references
-**Plans**: TBD
+  1. PR #1 (NUB-SIGNER) is closed on GitHub with an explanatory comment; remote branch deleted
+  2. NUB-SIGNER row removed from README.md registry table
+  3. A single canonical name (NUB-IFC) is used consistently in README.md and CLAUDE.md — no remaining NUB-IPC references
 
 ### Phase 3: NUB-STORAGE Rewrite
 **Goal**: NUB-STORAGE is fully rewritten using the SPEC.md wire format (`storage.*` message types) — validating the new spec structure before higher-complexity specs use it
@@ -100,7 +102,7 @@ Phases execute in numeric order: 1 (done) → 2 → 3 → 4 → 5 → 6 → 7
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | -- | Complete | 2026-04-07 |
-| 2. NUB-SIGNER Demotion | 0/? | Not started | - |
+| 2. NUB-SIGNER Demotion | 0/1 | Not started | - |
 | 3. NUB-STORAGE Rewrite | 0/? | Not started | - |
 | 4. NUB-RELAY Rewrite | 0/? | Not started | - |
 | 5. NUB-NOSTRDB Rewrite | 0/? | Not started | - |
