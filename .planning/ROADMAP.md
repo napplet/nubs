@@ -53,15 +53,17 @@ Plans:
 - [x] 03-01-PLAN.md — Rewrite NUB-STORAGE.md wire format and update PR #3
 
 ### Phase 4: NUB-RELAY Rewrite
-**Goal**: NUB-RELAY is fully rewritten using `relay.*` message types — the central interface of the milestone — with no crypto in the napplet-visible API
+**Goal**: NUB-RELAY is fully rewritten using `relay.*` message types — the central interface of the milestone — with napplets signing events themselves via `window.nostr.signEvent()` (NIP-07) before publishing
 **Depends on**: Phase 3
 **Requirements**: SPEC-01
 **Success Criteria** (what must be TRUE):
-  1. NUB-RELAY defines `relay.publish`, `relay.subscribe`, `relay.query` (and corresponding result types) using SPEC.md wire format — napplet sends unsigned content, shell handles signing internally
-  2. Shell Behavior section describes how the runtime signs, stamps, and forwards to relays — this detail is not visible to napplets
+  1. NUB-RELAY defines `relay.publish`, `relay.subscribe`, `relay.query` (and corresponding result types) using SPEC.md wire format — `relay.publish` accepts a signed NostrEvent, napplets sign via `window.nostr.signEvent()` before calling publish
+  2. Shell Behavior section describes how the runtime forwards signed events to relays and delivers incoming events — this detail is not visible to napplets beyond the message types
   3. NUB-RELAY does not reference NUB-SIGNER as a napplet-visible dependency
   4. `subscribe` and `query` result payloads are defined with clear types
-**Plans**: TBD
+**Plans:** 1 plan
+Plans:
+- [ ] 04-01-PLAN.md — Rewrite NUB-RELAY.md wire format and update PR #2
 
 ### Phase 5: NUB-NOSTRDB Rewrite
 **Goal**: NUB-NOSTRDB is fully rewritten using `nostrdb.*` message types — napplets can cache and query events received from subscriptions
@@ -106,7 +108,7 @@ Phases execute in numeric order: 1 (done) → 2 → 3 → 4 → 5 → 6 → 7
 | 1. Foundation | -- | Complete | 2026-04-07 |
 | 2. NUB-SIGNER Demotion | 0/1 | Not started | - |
 | 3. NUB-STORAGE Rewrite | 1/1 | Complete   | 2026-04-07 |
-| 4. NUB-RELAY Rewrite | 0/? | Not started | - |
+| 4. NUB-RELAY Rewrite | 0/1 | Not started | - |
 | 5. NUB-NOSTRDB Rewrite | 0/? | Not started | - |
 | 6. NUB-IFC Rewrite | 0/? | Not started | - |
 | 7. Pipes, Security Audit & Governance | 0/? | Not started | - |
