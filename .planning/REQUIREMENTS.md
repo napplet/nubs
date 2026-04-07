@@ -7,14 +7,14 @@
 
 Requirements for initial spec simplification. Each maps to roadmap phases.
 
-### Foundation
+### Foundation (Complete)
 
-- [ ] **FOUND-01**: SPEC.md defines the two-layer architecture (spec layer vs implementation layer) with clear boundary rules
-- [ ] **FOUND-02**: SPEC.md defines canonical type vocabulary (`EventTemplate`, wire message shapes, opaque identity tokens)
-- [ ] **FOUND-03**: SPEC.md defines the "runtime-internal interface" category for specs like NUB-SIGNER
-- [ ] **FOUND-04**: SPEC.md defines the passthrough exception (napplet can forward externally-authored signed events, cannot author signatures)
-- [ ] **FOUND-05**: SPEC.md resolves "no crypto" scope: no signing operations vs no raw pubkeys ever (PIPES peer identity decision)
-- [ ] **FOUND-06**: Kind 29003 cross-spec audit completed (shared by IFC and STORAGE)
+- [x] **FOUND-01**: SPEC.md defines the two-layer architecture (spec layer vs implementation layer) with clear boundary rules
+- [x] **FOUND-02**: SPEC.md defines canonical wire format (`{ "type": "domain.action", ...payload }`) replacing NIP-01 event-based protocol
+- [x] **FOUND-03**: SPEC.md architecture implicitly supports runtime-internal interfaces (napplets have no access to `window.nostr`)
+- [x] **FOUND-04**: SPEC.md wire format eliminates napplet signing entirely — napplets send typed messages, shell handles all crypto
+- [x] **FOUND-05**: SPEC.md resolves "no crypto" scope — napplets have no signing, no keypairs, no `window.nostr` access
+- [x] **FOUND-06**: Kind numbers removed from wire protocol entirely — NIP-01 event kinds are now shell implementation details only
 
 ### Interface Specs
 
@@ -56,29 +56,30 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | — | Pending |
-| FOUND-02 | — | Pending |
-| FOUND-03 | — | Pending |
-| FOUND-04 | — | Pending |
-| FOUND-05 | — | Pending |
-| FOUND-06 | — | Pending |
-| SPEC-01 | — | Pending |
-| SPEC-02 | — | Pending |
-| SPEC-03 | — | Pending |
-| SPEC-04 | — | Pending |
-| SPEC-05 | — | Pending |
-| SPEC-06 | — | Pending |
-| SPEC-07 | — | Pending |
-| SPEC-08 | — | Pending |
-| GOVN-01 | — | Pending |
-| GOVN-02 | — | Pending |
-| GOVN-03 | — | Pending |
+| FOUND-01 | Phase 1 | Complete |
+| FOUND-02 | Phase 1 | Complete |
+| FOUND-03 | Phase 1 | Complete |
+| FOUND-04 | Phase 1 | Complete |
+| FOUND-05 | Phase 1 | Complete |
+| FOUND-06 | Phase 1 | Complete |
+| SPEC-01 | Phase 4 | Pending |
+| SPEC-02 | Phase 3 | Pending |
+| SPEC-03 | Phase 2 | Pending |
+| SPEC-04 | Phase 5 | Pending |
+| SPEC-05 | Phase 6 | Pending |
+| SPEC-06 | Phase 7 | Pending |
+| SPEC-07 | Phase 2 | Pending |
+| SPEC-08 | Phase 7 | Pending |
+| GOVN-01 | Phase 7 | Pending |
+| GOVN-02 | Phase 7 | Pending |
+| GOVN-03 | Phase 7 | Pending |
 
 **Coverage:**
 - v0.1.0 requirements: 17 total
-- Mapped to phases: 0
-- Unmapped: 17
+- Mapped to phases: 17
+- Unmapped: 0
+- Complete: 6 (Foundation)
 
 ---
 *Requirements defined: 2026-04-07*
-*Last updated: 2026-04-07 after initial definition*
+*Last updated: 2026-04-07 after roadmap creation*
