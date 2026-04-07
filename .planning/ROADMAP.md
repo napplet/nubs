@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: NUB-RELAY Rewrite** - Highest-impact rewrite; publish via typed messages, no crypto in napplet API (completed 2026-04-07)
 - [ ] **Phase 5: NUB-NOSTRDB Rewrite** - Event caching interface aligned with new wire format
 - [x] **Phase 6: NUB-IFC Rewrite** - Most prose-heavy; sender verification model updated (completed 2026-04-07)
-- [ ] **Phase 7: Pipes, Security Audit & Governance** - PIPES rewrite, cross-spec security audit, templates and registry
+- [ ] **Phase 7: Pipes, Security Audit & Governance** - Close PIPES, add channels to IFC, cross-spec security audit, templates and registry
 
 ## Phase Details
 
@@ -90,16 +90,19 @@ Plans:
 - [x] 06-01-PLAN.md — Rewrite NUB-IFC.md wire format and update PR #5
 
 ### Phase 7: Pipes, Security Audit & Governance
-**Goal**: NUB-PIPES is rewritten as a final validation of the new spec structure; cross-spec Security Considerations audit confirms consistency; templates and registry updated
+**Goal**: NUB-PIPES is closed and its channel concepts absorbed into NUB-IFC; cross-spec Security Considerations audit confirms consistency; templates and registry updated
 **Depends on**: Phase 6
 **Requirements**: SPEC-06, SPEC-08, GOVN-01, GOVN-02, GOVN-03
 **Success Criteria** (what must be TRUE):
-  1. NUB-PIPES defines `pipes.*` message types with peer identity using opaque token or dTag — not raw pubkey
-  2. All 6 spec Security Considerations sections use the runtime as the subject of MUST clauses for crypto operations — no spec says napplets MUST sign or verify
+  1. PR #6 (NUB-PIPES) is closed, nub-pipes branch deleted, channel support added to NUB-IFC as `ifc.channel.*` message types
+  2. All 4 spec Security Considerations sections use the runtime as the subject of MUST clauses for crypto operations — no spec says napplets MUST sign or verify
   3. TEMPLATE-WORD.md uses the SPEC.md wire format structure (`type` strings, payload shapes, shell behavior) so future specs follow the pattern
   4. TEMPLATE-NN.md is updated to reflect the new spec philosophy
-  5. README registry table reflects current canonical names and runtime-internal classification for NUB-SIGNER
-**Plans**: TBD
+  5. README registry table has 4 specs (RELAY, STORAGE, NOSTRDB, IFC) — NUB-PIPES removed
+**Plans:** 2 plans
+Plans:
+- [ ] 07-01-PLAN.md — Close PIPES PR, add channel support to NUB-IFC spec
+- [ ] 07-02-PLAN.md — Cross-spec security audit, update templates and README registry
 **UI hint**: no
 
 ## Progress
@@ -115,4 +118,4 @@ Phases execute in numeric order: 1 (done) → 2 → 3 → 4 → 5 → 6 → 7
 | 4. NUB-RELAY Rewrite | 1/1 | Complete   | 2026-04-07 |
 | 5. NUB-NOSTRDB Rewrite | 1/1 | Complete   | 2026-04-07 |
 | 6. NUB-IFC Rewrite | 1/1 | Complete   | 2026-04-07 |
-| 7. Pipes, Security Audit & Governance | 0/? | Not started | - |
+| 7. Pipes, Security Audit & Governance | 0/2 | Not started | - |
