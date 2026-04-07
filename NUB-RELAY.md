@@ -39,7 +39,7 @@ interface Subscription {
 
 **`subscribe(filters, options?)`** -- Opens a live subscription. The shell queries its relay pool, streaming matching events back as `relay.event` messages. Returns a handle to listen for events and EOSE, and to close the subscription. When `options.relay` is provided, the subscription targets a specific relay (e.g., for NIP-29 group relays) instead of the shared pool.
 
-**`publish(event)`** -- Publishes a signed Nostr event to the shell's relay pool. The napplet MUST sign the event via `window.nostr.signEvent(template)` before calling publish. The shell forwards the signed event to relays and returns the result.
+**`publish(event)`** -- Publishes a signed Nostr event to the shell's relay pool. The napplet signs the event via `window.nostr.signEvent(template)` before calling publish. The shell forwards the signed event to relays and returns the result.
 
 **`query(filters)`** -- Convenience wrapper: subscribes, collects events until EOSE, then closes the subscription and resolves the Promise with the collected events.
 
