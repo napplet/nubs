@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: NUB-RELAY Rewrite** - Highest-impact rewrite; publish via typed messages, no crypto in napplet API (completed 2026-04-07)
 - [ ] **Phase 5: NUB-NOSTRDB Rewrite** - Event caching interface aligned with new wire format
 - [x] **Phase 6: NUB-IFC Rewrite** - Most prose-heavy; sender verification model updated (completed 2026-04-07)
-- [ ] **Phase 7: Pipes, Security Audit & Governance** - Close PIPES, add channels to IFC, cross-spec security audit, templates and registry
+- [x] **Phase 7: Pipes, Security Audit & Governance** - Close PIPES, add channels to IFC, cross-spec security audit, templates and registry (completed 2026-04-07)
 
 ## Phase Details
 
@@ -99,10 +99,10 @@ Plans:
   3. TEMPLATE-WORD.md uses the SPEC.md wire format structure (`type` strings, payload shapes, shell behavior) so future specs follow the pattern
   4. TEMPLATE-NN.md is updated to reflect the new spec philosophy
   5. README registry table has 4 specs (RELAY, STORAGE, NOSTRDB, IFC) — NUB-PIPES removed
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 Plans:
 - [x] 07-01-PLAN.md — Close PIPES PR, add channel support to NUB-IFC spec
-- [ ] 07-02-PLAN.md — Cross-spec security audit, update templates and README registry
+- [x] 07-02-PLAN.md — Cross-spec security audit, update templates and README registry
 **UI hint**: no
 
 ## Progress
@@ -118,4 +118,4 @@ Phases execute in numeric order: 1 (done) → 2 → 3 → 4 → 5 → 6 → 7
 | 4. NUB-RELAY Rewrite | 1/1 | Complete   | 2026-04-07 |
 | 5. NUB-NOSTRDB Rewrite | 1/1 | Complete   | 2026-04-07 |
 | 6. NUB-IFC Rewrite | 1/1 | Complete   | 2026-04-07 |
-| 7. Pipes, Security Audit & Governance | 1/2 | In Progress|  |
+| 7. Pipes, Security Audit & Governance | 2/2 | Complete   | 2026-04-07 |

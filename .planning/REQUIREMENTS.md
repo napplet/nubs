@@ -25,13 +25,13 @@ Requirements for initial spec simplification. Each maps to roadmap phases.
 - [x] **SPEC-05**: NUB-IFC rewritten — drop signed event wrappers, sender verification via `MessageEvent.source`
 - [x] **SPEC-06**: NUB-PIPES rewritten — peer identity uses opaque token or dTag (per FOUND-05 decision), not raw pubkey
 - [x] **SPEC-07**: NUB-IFC naming resolved — canonical name decided and applied consistently (IPC vs IFC)
-- [ ] **SPEC-08**: Security Considerations sections updated in all 6 specs to reflect runtime-owned crypto model
+- [x] **SPEC-08**: Security Considerations sections updated in all 6 specs to reflect runtime-owned crypto model
 
 ### Templates & Governance
 
-- [ ] **GOVN-01**: TEMPLATE-WORD.md updated with two-layer section structure (Napplet API / Wire Protocol / Shell Behavior / Implementation Reference)
-- [ ] **GOVN-02**: TEMPLATE-NN.md updated to reflect new spec philosophy
-- [ ] **GOVN-03**: README.md registry table updated to reflect revised spec status and any naming changes
+- [x] **GOVN-01**: TEMPLATE-WORD.md updated with two-layer section structure (Napplet API / Wire Protocol / Shell Behavior / Implementation Reference)
+- [x] **GOVN-02**: TEMPLATE-NN.md updated to reflect new spec philosophy
+- [x] **GOVN-03**: README.md registry table updated to reflect revised spec status and any naming changes
 
 ## Future Requirements
 
@@ -69,10 +69,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SPEC-05 | Phase 6 | Complete |
 | SPEC-06 | Phase 7 | Complete |
 | SPEC-07 | Phase 2 | Complete |
-| SPEC-08 | Phase 7 | Pending |
-| GOVN-01 | Phase 7 | Pending |
-| GOVN-02 | Phase 7 | Pending |
-| GOVN-03 | Phase 7 | Pending |
+| SPEC-08 | Phase 7 | Complete |
+| GOVN-01 | Phase 7 | Complete |
+| GOVN-02 | Phase 7 | Complete |
+| GOVN-03 | Phase 7 | Complete |
 
 **Coverage:**
 - v0.1.0 requirements: 17 total

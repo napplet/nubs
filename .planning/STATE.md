@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v0.1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 07-pipes-security-audit-governance/07-01-PLAN.md
-last_updated: "2026-04-07T11:43:28.144Z"
+status: verifying
+stopped_at: Completed 07-pipes-security-audit-governance/07-02-PLAN.md
+last_updated: "2026-04-07T11:51:01.591Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 7
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 7
-  completed_plans: 6
+  completed_plans: 7
   percent: 14
 ---
 
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-04-07)
 
 Phase: 07 (pipes-security-audit-governance) — EXECUTING
 Plan: 2 of 2
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-04-07
 
 Progress: [█░░░░░░░░░] 14%
@@ -58,6 +58,7 @@ Progress: [█░░░░░░░░░] 14%
 | Phase 05-nub-nostrdb-rewrite P01 | 2 | 2 tasks | 1 files |
 | Phase 06-nub-ifc-rewrite P01 | 2 | 2 tasks | 1 files |
 | Phase 07-pipes-security-audit-governance P01 | 2 | 2 tasks | 1 files |
+| Phase 07-pipes-security-audit-governance P02 | 12 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -80,6 +81,9 @@ Progress: [█░░░░░░░░░] 14%
 - [Phase 07-pipes-security-audit-governance]: NUB-PIPES eliminated as separate spec — channel functionality merged into NUB-IFC as ifc.channel.* types
 - [Phase 07-pipes-security-audit-governance]: Auth-on-open model: shell validates channel target once at open time, no per-message validation after that
 - [Phase 07-pipes-security-audit-governance]: Channel IDs are opaque (shell-assigned) — napplets cannot enumerate or guess other channels IDs, preventing hijacking
+- [Phase 07-pipes-security-audit-governance]: Security audit confirmed: shell is subject of all MUST crypto clauses — no napplet MUST sign/verify anywhere in the 4 specs
+- [Phase 07-pipes-security-audit-governance]: TEMPLATE-WORD.md Wire Protocol section established as canonical format for NUB-WORD spec authors — domain.action replaces Event Kinds table
+- [Phase 07-pipes-security-audit-governance]: Registry table final: 4 rows only (RELAY, STORAGE, NOSTRDB, IFC) — NUB-PIPES eliminated in favor of IFC channel support
 
 ### Pending Todos
 
@@ -92,6 +96,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T11:43:28.142Z
-Stopped at: Completed 07-pipes-security-audit-governance/07-01-PLAN.md
+Last session: 2026-04-07T11:51:01.588Z
+Stopped at: Completed 07-pipes-security-audit-governance/07-02-PLAN.md
 Resume file: None
