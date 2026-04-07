@@ -18,7 +18,7 @@ Requirements for initial spec simplification. Each maps to roadmap phases.
 
 ### Interface Specs
 
-- [x] **SPEC-01**: NUB-RELAY rewritten — `publish(template)` is self-contained, no `signEvent()` in napplet path, shell signs internally
+- [x] **SPEC-01**: NUB-RELAY rewritten — `publish(event)` accepts signed NostrEvent, napplet signs via `window.nostr.signEvent()`, relay.* wire format
 - [x] **SPEC-02**: NUB-STORAGE rewritten — crypto implementation details removed from napplet-facing sections
 - [x] **SPEC-03**: NUB-SIGNER reframed as runtime-internal interface with optional user-consent-only API surface
 - [ ] **SPEC-04**: NUB-NOSTRDB rewritten — passthrough exception applied to `add()`, no napplet-authored signatures
