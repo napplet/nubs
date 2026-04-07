@@ -21,7 +21,7 @@ consume them. Discovery: `shell.supports("relay")`.
 | [NUB-STORAGE](https://github.com/napplet/nubs/pull/3) | `window.napplet.storage` | Scoped key-value storage | Draft |
 | [NUB-NOSTRDB](https://github.com/napplet/nubs/pull/4) | `window.nostrdb` | Local event database | Draft |
 | [NUB-IFC](https://github.com/napplet/nubs/pull/5) | `window.napplet.ifc` | Inter-frame communication | Draft |
-| [NUB-THEME](https://github.com/napplet/nubs/pull/7) | `window.napplet.theme` | Shell-provided theming | Draft |
+| [NUB-THEME](https://github.com/napplet/nubs/pull/8) | `window.napplet.theme` | Shell-provided theming | Draft |
 
 ### NUB-NN (Message Protocol Specs)
 
