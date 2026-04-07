@@ -23,7 +23,7 @@ Requirements for initial spec simplification. Each maps to roadmap phases.
 - [x] **SPEC-03**: NUB-SIGNER reframed as runtime-internal interface with optional user-consent-only API surface
 - [x] **SPEC-04**: NUB-NOSTRDB rewritten — passthrough exception applied to `add()`, no napplet-authored signatures
 - [x] **SPEC-05**: NUB-IFC rewritten — drop signed event wrappers, sender verification via `MessageEvent.source`
-- [ ] **SPEC-06**: NUB-PIPES rewritten — peer identity uses opaque token or dTag (per FOUND-05 decision), not raw pubkey
+- [x] **SPEC-06**: NUB-PIPES rewritten — peer identity uses opaque token or dTag (per FOUND-05 decision), not raw pubkey
 - [x] **SPEC-07**: NUB-IFC naming resolved — canonical name decided and applied consistently (IPC vs IFC)
 - [ ] **SPEC-08**: Security Considerations sections updated in all 6 specs to reflect runtime-owned crypto model
 
@@ -67,7 +67,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SPEC-03 | Phase 2 | Complete |
 | SPEC-04 | Phase 5 | Complete |
 | SPEC-05 | Phase 6 | Complete |
-| SPEC-06 | Phase 7 | Pending |
+| SPEC-06 | Phase 7 | Complete |
 | SPEC-07 | Phase 2 | Complete |
 | SPEC-08 | Phase 7 | Pending |
 | GOVN-01 | Phase 7 | Pending |

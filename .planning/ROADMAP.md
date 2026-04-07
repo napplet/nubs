@@ -99,9 +99,9 @@ Plans:
   3. TEMPLATE-WORD.md uses the SPEC.md wire format structure (`type` strings, payload shapes, shell behavior) so future specs follow the pattern
   4. TEMPLATE-NN.md is updated to reflect the new spec philosophy
   5. README registry table has 4 specs (RELAY, STORAGE, NOSTRDB, IFC) — NUB-PIPES removed
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
-- [ ] 07-01-PLAN.md — Close PIPES PR, add channel support to NUB-IFC spec
+- [x] 07-01-PLAN.md — Close PIPES PR, add channel support to NUB-IFC spec
 - [ ] 07-02-PLAN.md — Cross-spec security audit, update templates and README registry
 **UI hint**: no
 
@@ -118,4 +118,4 @@ Phases execute in numeric order: 1 (done) → 2 → 3 → 4 → 5 → 6 → 7
 | 4. NUB-RELAY Rewrite | 1/1 | Complete   | 2026-04-07 |
 | 5. NUB-NOSTRDB Rewrite | 1/1 | Complete   | 2026-04-07 |
 | 6. NUB-IFC Rewrite | 1/1 | Complete   | 2026-04-07 |
-| 7. Pipes, Security Audit & Governance | 0/2 | Not started | - |
+| 7. Pipes, Security Audit & Governance | 1/2 | In Progress|  |
