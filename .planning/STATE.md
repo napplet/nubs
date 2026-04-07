@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v0.1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Completed 05-nub-nostrdb-rewrite/05-01-PLAN.md
-last_updated: "2026-04-07T11:23:39.380Z"
+stopped_at: Completed 06-nub-ifc-rewrite/06-01-PLAN.md
+last_updated: "2026-04-07T11:26:41.418Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 7
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 5
-  completed_plans: 4
+  completed_plans: 5
   percent: 14
 ---
 
@@ -56,6 +56,7 @@ Progress: [█░░░░░░░░░] 14%
 | Phase 03-nub-storage-rewrite P01 | 15 | 2 tasks | 1 files |
 | Phase 04-nub-relay-rewrite P01 | 2 | 2 tasks | 1 files |
 | Phase 05-nub-nostrdb-rewrite P01 | 2 | 2 tasks | 1 files |
+| Phase 06-nub-ifc-rewrite P01 | 2 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,9 @@ Progress: [█░░░░░░░░░] 14%
 - [Phase 04-nub-relay-rewrite]: Shell MUST verify event signatures before relay broadcast — invalid signatures rejected with relay.publish.result ok:false
 - [Phase 05-nub-nostrdb-rewrite]: nostrdb.sub.event and nostrdb.sub.eose used for subscription push to disambiguate from nostrdb.event by-id lookup
 - [Phase 05-nub-nostrdb-rewrite]: nostrdb.add documents externally-authored pattern: napplets do NOT sign events, they cache relay.event-received events
+- [Phase 06-nub-ifc-rewrite]: ifc.emit is fire-and-forget with no id field — no acknowledgment needed for pub/sub broadcast
+- [Phase 06-nub-ifc-rewrite]: Sender identity in ifc.event uses dTag (not pubkey) — shell-enforced via MessageEvent.source mapping
+- [Phase 06-nub-ifc-rewrite]: Topic conventions (shell:*, napplet:*, domain:*) are advisory — shell routes by topic match, not prefix parsing
 
 ### Pending Todos
 
@@ -84,6 +88,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T11:21:11.458Z
-Stopped at: Completed 05-nub-nostrdb-rewrite/05-01-PLAN.md
+Last session: 2026-04-07T11:26:41.416Z
+Stopped at: Completed 06-nub-ifc-rewrite/06-01-PLAN.md
 Resume file: None

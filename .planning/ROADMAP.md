@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: NUB-STORAGE Rewrite** - Simplest spec rewrite; validates new wire format in practice (completed 2026-04-07)
 - [x] **Phase 4: NUB-RELAY Rewrite** - Highest-impact rewrite; publish via typed messages, no crypto in napplet API (completed 2026-04-07)
 - [ ] **Phase 5: NUB-NOSTRDB Rewrite** - Event caching interface aligned with new wire format
-- [ ] **Phase 6: NUB-IFC Rewrite** - Most prose-heavy; sender verification model updated
+- [x] **Phase 6: NUB-IFC Rewrite** - Most prose-heavy; sender verification model updated (completed 2026-04-07)
 - [ ] **Phase 7: Pipes, Security Audit & Governance** - PIPES rewrite, cross-spec security audit, templates and registry
 
 ## Phase Details
@@ -85,9 +85,9 @@ Plans:
   1. NUB-IFC defines `ifc.*` message types (e.g., `ifc.emit`, `ifc.on`) with no signing or cryptographic operations in napplet-facing sections
   2. Shell Behavior section documents sender verification via `MessageEvent.source` → napplet identity mapping (per SPEC.md)
   3. Security Considerations describes sender identity as shell-enforced — no per-message Schnorr signing as napplet responsibility
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
-- [ ] 06-01-PLAN.md — Rewrite NUB-IFC.md wire format and update PR #5
+- [x] 06-01-PLAN.md — Rewrite NUB-IFC.md wire format and update PR #5
 
 ### Phase 7: Pipes, Security Audit & Governance
 **Goal**: NUB-PIPES is rewritten as a final validation of the new spec structure; cross-spec Security Considerations audit confirms consistency; templates and registry updated
@@ -114,5 +114,5 @@ Phases execute in numeric order: 1 (done) → 2 → 3 → 4 → 5 → 6 → 7
 | 3. NUB-STORAGE Rewrite | 1/1 | Complete   | 2026-04-07 |
 | 4. NUB-RELAY Rewrite | 1/1 | Complete   | 2026-04-07 |
 | 5. NUB-NOSTRDB Rewrite | 1/1 | Complete   | 2026-04-07 |
-| 6. NUB-IFC Rewrite | 0/1 | Planned | - |
+| 6. NUB-IFC Rewrite | 1/1 | Complete   | 2026-04-07 |
 | 7. Pipes, Security Audit & Governance | 0/? | Not started | - |
