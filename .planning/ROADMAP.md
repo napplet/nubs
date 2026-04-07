@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Requirements**: SPEC-03, SPEC-07
 **Plans:** 1 plan
 Plans:
-- [ ] 02-01-PLAN.md — Close NUB-SIGNER PR, delete branch, update README.md and CLAUDE.md with NUB-IFC naming
+- [x] 02-01-PLAN.md — Close NUB-SIGNER PR, delete branch, update README.md and CLAUDE.md with NUB-IFC naming
 **Success Criteria** (what must be TRUE):
   1. PR #1 (NUB-SIGNER) is closed on GitHub with an explanatory comment; remote branch deleted
   2. NUB-SIGNER row removed from README.md registry table

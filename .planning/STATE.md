@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v0.1.0
 milestone_name: milestone
-status: planning
-stopped_at: Phase 2 context gathered
-last_updated: "2026-04-07T10:22:31.736Z"
-last_activity: 2026-04-07 — Phase 1 completed (SPEC.md written externally), roadmap adjusted
+status: verifying
+stopped_at: Completed 02-nub-signer-demotion/02-01-PLAN.md
+last_updated: "2026-04-07T10:36:50.479Z"
+last_activity: 2026-04-07
 progress:
   total_phases: 7
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  completed_phases: 1
+  total_plans: 1
+  completed_plans: 1
   percent: 14
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-07)
 
 **Core value:** Napplet authors never touch crypto. They subscribe(), publish(), query().
-**Current focus:** Milestone v0.1.0 — Phase 2: NUB-SIGNER Demotion (ready to plan)
+**Current focus:** Phase 02 — nub-signer-demotion
 
 ## Current Position
 
-Phase: 2 of 7 (NUB-SIGNER Demotion)
-Plan: -- of -- in current phase
-Status: Ready to plan
-Last activity: 2026-04-07 — Phase 1 completed (SPEC.md written externally), roadmap adjusted
+Phase: 02 (nub-signer-demotion) — EXECUTING
+Plan: 1 of 1
+Status: Phase complete — ready for verification
+Last activity: 2026-04-07
 
 Progress: [█░░░░░░░░░] 14%
 
@@ -52,6 +52,7 @@ Progress: [█░░░░░░░░░] 14%
 - Trend: --
 
 *Updated after each plan completion*
+| Phase 02-nub-signer-demotion P01 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -60,6 +61,8 @@ Progress: [█░░░░░░░░░] 14%
 - SPEC.md uses `{ "type": "domain.action", ...payload }` wire format instead of NIP-01 events — this is a larger shift than originally planned, meaning kind numbers are shell implementation details only
 - Identity is `MessageEvent.source` based, assigned at iframe creation — no negotiation
 - Napplets have no access to `window.nostr` — all signing proxied through shell
+- [Phase 02-nub-signer-demotion]: NUB-SIGNER closed entirely — NIP-07 window.nostr is a SPEC.md core requirement (shells MUST provide it), so there is nothing left for a separate spec to define
+- [Phase 02-nub-signer-demotion]: NUB-IFC is the canonical name for inter-frame communication — all NUB-IPC references replaced in README.md and CLAUDE.md
 
 ### Pending Todos
 
@@ -72,6 +75,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T10:22:31.733Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-nub-signer-demotion/02-CONTEXT.md
+Last session: 2026-04-07T10:36:50.476Z
+Stopped at: Completed 02-nub-signer-demotion/02-01-PLAN.md
+Resume file: None
