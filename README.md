@@ -22,6 +22,9 @@ consume them. Discovery: `shell.supports("relay")`.
 | [NUB-NOSTRDB](https://github.com/napplet/nubs/pull/4) | `window.nostrdb` | Local event database | Draft |
 | [NUB-IFC](https://github.com/napplet/nubs/pull/5) | `window.napplet.ifc` | Inter-frame communication | Draft |
 | [NUB-THEME](https://github.com/napplet/nubs/pull/8) | `window.napplet.theme` | Shell-provided theming | Draft |
+| NUB-KEYS | `window.napplet.keys` | Keyboard forwarding and action keybindings | Draft |
+| NUB-MEDIA | `window.napplet.media` | Media session control and playback | Draft |
+| NUB-NOTIFY | `window.napplet.notify` | Shell-rendered notifications | Draft |
 
 ### NUB-NN (Message Protocol Specs)
 
