@@ -2,9 +2,9 @@ NUB: Napplet Unified Blueprints
 ===============================
 
 NUBs extend [NIP-5D](../NIP-5D.md) with interface and protocol specifications
-for the napplet ecosystem. The core NIP defines transport, authentication, and
-security. Everything else -- relay access, storage, signing, IFC, message
-protocols -- is a NUB.
+for the napplet ecosystem. The core NIP defines transport, identity, and
+security. Everything else -- relay access, storage, identity queries, IFC,
+message protocols -- is a NUB.
 
 ## Two Tracks
 
@@ -12,19 +12,20 @@ protocols -- is a NUB.
 
 Named by a single uppercase word. One canonical spec per name. Defines
 shell-provided API contracts, what shows up on `window.napplet.*` or
-`window.nostr` or `window.nostrdb`. The shell implements these; napplets
-consume them. Discovery: `shell.supports("relay")`.
+`window.nostrdb`. The shell implements these; napplets consume them.
+Discovery: `shell.supports("relay")`.
 
 | NUB ID | Namespace | Description | Status |
 |--------|-----------|-------------|--------|
-| [NUB-RELAY](https://github.com/napplet/nubs/pull/2) | `window.napplet.relay` | Relay proxy | Draft |
+| [NUB-RELAY](https://github.com/napplet/nubs/pull/2) | `window.napplet.relay` | Relay proxy (subscribe, publish, query, publishEncrypted) | Draft |
+| [NUB-IDENTITY](https://github.com/napplet/nubs/pull/12) | `window.napplet.identity` | Read-only user identity queries | Draft |
 | [NUB-STORAGE](https://github.com/napplet/nubs/pull/3) | `window.napplet.storage` | Scoped key-value storage | Draft |
 | [NUB-NOSTRDB](https://github.com/napplet/nubs/pull/4) | `window.nostrdb` | Local event database | Draft |
 | [NUB-IFC](https://github.com/napplet/nubs/pull/5) | `window.napplet.ifc` | Inter-frame communication | Draft |
 | [NUB-THEME](https://github.com/napplet/nubs/pull/8) | `window.napplet.theme` | Shell-provided theming | Draft |
-| NUB-KEYS | `window.napplet.keys` | Keyboard forwarding and action keybindings | Draft |
-| NUB-MEDIA | `window.napplet.media` | Media session control and playback | Draft |
-| NUB-NOTIFY | `window.napplet.notify` | Shell-rendered notifications | Draft |
+| [NUB-KEYS](https://github.com/napplet/nubs/pull/9) | `window.napplet.keys` | Keyboard forwarding and action keybindings | Draft |
+| [NUB-MEDIA](https://github.com/napplet/nubs/pull/10) | `window.napplet.media` | Media session control and playback | Draft |
+| [NUB-NOTIFY](https://github.com/napplet/nubs/pull/11) | `window.napplet.notify` | Shell-rendered notifications | Draft |
 
 ### NUB-NN (Message Protocol Specs)
 
