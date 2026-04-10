@@ -69,8 +69,16 @@ The 6 initial interface specs to submit as PRs (source files in `~/Develop/nappl
 | NUB-IFC | `~/Develop/napplet/specs/nubs/NUB-IFC.md` | `nub-ifc` |
 | NUB-PIPES | `~/Develop/napplet/specs/nubs/NUB-PIPES.md` | `nub-pipes` |
 
+## Checklist: When Modifying a NUB
+
+Every time you create or modify a NUB spec, you MUST:
+
+1. **Update README.md registry table** — add new NUBs, update descriptions for modified ones
+2. **Update the PR body** — if the NUB already has an open PR, update its body to reflect changes (use `gh pr edit <number> --body`)
+3. **No private references** — NEVER mention `@napplet/*` packages, the napplet/napplet repo, or any private implementation in specs, commits, or PR bodies. This repo is PUBLIC.
+4. **Implementations section** — always `- (none yet)` until a public implementation exists
+5. **Commit messages** — describe the protocol change only, never reference private packages
+
 ## Related Repos
 
-- [`napplet/napplet`](https://github.com/sandwichfarm/napplet) — SDK monorepo (`@napplet/shim`, `@napplet/shell`, etc.)
-- [`sandwichfarm/hyprgate`](https://github.com/sandwichfarm/hyprgate) — Reference shell implementation
 - [`nostr-protocol/nips`](https://github.com/nostr-protocol/nips) — NIP-5D lives here
