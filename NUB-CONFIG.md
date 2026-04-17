@@ -233,3 +233,46 @@ The JSON Schema `format` keyword (`email`, `uri`, `date`, `date-time`, `color`, 
 ### Depth Limit
 
 Shells MUST reject schemas nesting `object` properties more than 4 levels deep at `config.registerSchema` time, returning `config.registerSchema.result` with `ok: false` and `code: "schema-too-deep"`. Napplets MUST NOT assume arbitrary nesting is supported.
+
+## Shell Guarantees
+
+The key words MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY in this document are to be interpreted as described in RFC 2119.
+
+### MUST
+
+| Behavior | Details |
+|----------|---------|
+| Validate every value before delivery | Every `config.values` delivery MUST contain only values that validate against the currently-registered schema. Invalid values MUST NOT be delivered. |
+| Apply declared defaults | Missing properties MUST be populated from `default` per the deterministic default-resolution rule in Schema Contract. |
+| Scope storage by `(dTag, aggregateHash)` | Persisted values MUST be keyed on the napplet's `(dTag, aggregateHash)` identity per NIP-5D. A napplet cannot read or write outside its own scope. |
+| Be the sole writer | The shell MUST be the only entity that writes values. No napplet->shell wire message mutates persisted values. |
+| Mask `x-napplet-secret: true` fields (Tier 0) | Shells MUST treat properties marked `x-napplet-secret: true` as secrets at the minimum Tier 0 level: mask input in the settings UI, do NOT include the default (napplets MUST NOT set `default` on such fields), and do NOT deliver the property in `config.values` if the value has never been explicitly set by the user. |
+| Reject schemas exceeding the depth limit | Return `config.registerSchema.result` with `ok: false, code: "schema-too-deep"`. |
+| Reject schemas with forbidden features | `$ref`, `pattern` (in v1), `definitions`, combinatorial schemas (`oneOf`/`anyOf`/`allOf`/`not`), tuple-typed arrays, and conditional schemas (`if`/`then`/`else`) MUST cause `config.registerSchema.result` with `ok: false` and an appropriate code. |
+| Reject `x-napplet-secret: true` coexisting with `default` | Return `config.registerSchema.result` with `ok: false, code: "secret-with-default"`. |
+| Produce initial snapshot after registerSchema is applied | `config.subscribe` MUST NOT deliver its first `config.values` until the most recent `config.registerSchema` from the same source has been fully applied (defaults resolved, storage scoped). If subscribe arrives before any schema has been registered (no manifest, no runtime registerSchema), shells MUST emit `config.schemaError` with `code: "no-schema"`. |
+| Drop orphaned properties | Persisted values for properties not in the currently-registered schema MUST NOT be delivered. For `x-napplet-secret: true` properties, orphaned values MUST be deleted immediately on schema change; non-secret orphans MAY be retained briefly (grace period) but MUST NOT be delivered. |
+
+### SHOULD
+
+| Behavior | Details |
+|----------|---------|
+| Group by `x-napplet-section` | Shells SHOULD render properties grouped under the declared section heading. |
+| Sort within a section by `x-napplet-order` | Ascending; ties broken by property-key alphabetical order. Properties without `x-napplet-order` come after, alphabetically sorted. |
+| Surface `deprecationMessage` | Display next to affected fields so users understand impending removal. |
+| Render `markdownDescription` as markdown | Falling back to plain text. Never render as HTML. |
+| Coalesce rapid value changes | Debounce user-side edits (recommend ~100ms) so napplets receive terminal values, not every keystroke. |
+| Drop non-secret orphans after a grace period | One session is the recommended grace window. |
+| Honor `config.openSettings` for focused napplets | Only when the calling napplet has (or would have) user focus. Rate-limit repeated requests. |
+
+### MAY
+
+| Behavior | Details |
+|----------|---------|
+| Tier 2+ secret handling | Shells MAY store `x-napplet-secret: true` values encrypted at rest, in an OS keychain, or in another hardened backend. NOT required -- a Tier 0 in-process store is conformant. |
+| Render richer `format` widgets | For `format: "email" \| "uri" \| "date" \| "date-time" \| "color" \| "ipv4" \| "ipv6"`, shells MAY render a specialized widget; MUST NOT fail validation on `format` alone. |
+| Render nested objects beyond one level | Up to the depth limit (4). JSON fallback UI is acceptable for deep nesting. |
+| Back NUB-CONFIG storage with NUB-STORAGE internally | An implementation choice. The NUB-CONFIG wire surface does not depend on NUB-STORAGE. |
+| Use `$version` for cross-hash migration | Shells MAY act on `$version` to migrate values across `aggregateHash` changes; MAY ignore it and treat each hash as a fresh scope. |
+| Retain a "graveyard" of orphaned non-secret values | For a single session in case the napplet author rolls back a schema change. Graveyard values MUST NOT be delivered. |
+| Emit `config.settingsOpened` after openSettings | Optional ack so napplets can fall back when UI is unavailable. Napplets MUST NOT rely on this message. |
