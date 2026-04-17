@@ -142,3 +142,94 @@ Key design notes:
 ```
 <- { "type": "config.schemaError", "code": "invalid-schema", "error": "schema root must be of type `object`" }
 ```
+
+## Schema Contract
+
+NUB-CONFIG is a JSON-Schema-driven protocol, but it is NOT all of JSON Schema. Shells and napplets MUST agree on a bounded subset so that the same schema renders and validates consistently across every conformant shell. This section defines that subset (the Core Subset), the standardized annotations shells MAY act on (Potentialities), the migration-version signal (`$version`), and the set of features explicitly excluded from v1. Any schema feature not named in Core Subset or Potentialities is out of scope for NUB-CONFIG v1.
+
+### Core Subset
+
+Every conformant shell MUST accept and render schemas that use only the types, keywords, and constraints enumerated below. Napplets MUST NOT rely on any feature outside this subset for correct behavior.
+
+**Supported types (Core Subset):**
+
+- `object` -- top-level only. The schema root MUST be `{ "type": "object", "properties": { ... } }`.
+- `string`
+- `number`
+- `integer`
+- `boolean`
+- `array` of primitives -- homogeneous only. Tuple-typed arrays (`items: [schemaA, schemaB]`) are NOT in the Core Subset.
+- Nested `object` -- bounded depth; see Depth Limit below. Recommended maximum depth is 4.
+
+**Supported keywords (Core Subset):**
+
+- `type`
+- `properties`
+- `required` (array form)
+- `items` (homogeneous schema only)
+- `additionalProperties` (see override below)
+- `default`
+- `title`
+- `description`
+- `enum`
+- `enumDescriptions` -- parallel-array hint whose entries correspond positionally to `enum` entries; shells SHOULD render each description alongside its enum value.
+
+**Supported constraints (Core Subset):**
+
+- `minimum`, `maximum` -- apply to `number` and `integer` values
+- `minLength`, `maxLength` -- apply to `string` values
+- `minItems`, `maxItems` -- apply to `array` values
+
+**`additionalProperties` override:**
+
+Shells MUST treat `additionalProperties` as `false` at the top-level schema object when the napplet does not specify it explicitly. This overrides the JSON Schema draft-07 default of `true` for NUB-CONFIG scope. Rationale: persisted user settings must not accrete unknown properties silently; schema drift between napplet versions should drop orphaned keys, not preserve them.
+
+**Default-resolution rule (deterministic):**
+
+For every property at `config.values` delivery time, the shell MUST resolve its value in the following order:
+
+1. If a persisted value exists AND validates against the current schema, use it.
+2. Else if the property has its own `default`, use that.
+3. Else if an ancestor `default` object supplies a value for this property, use the ancestor's value for this property.
+4. Else the property is `undefined` in the delivered `config.values`.
+
+### Standardized Extensions (Potentialities)
+
+These are opt-in annotations napplets MAY declare on schema properties. Shells MAY act on them; shells MAY ignore them. Shells that do not recognize an extension MUST treat it as opaque metadata and MUST NOT reject the schema on that basis.
+
+| Keyword | Applies to | Shell MAY |
+|---------|------------|-----------|
+| `x-napplet-secret` (boolean) | any `string` property | mask input, suppress console/log output, decline to render a default value, route the stored value through a platform keychain or encrypted store |
+| `x-napplet-section` (string) | any property | group the property under the declared section heading in the settings UI |
+| `x-napplet-order` (non-negative number) | any property | sort properties within a section in ascending `x-napplet-order`; ties broken alphabetically by property key |
+| `deprecationMessage` (string) | any property | render the message next to the field as a deprecation notice |
+| `markdownDescription` (string) | any property | render the value as markdown; shells MAY fall back to plain text if markdown rendering is not available |
+
+### `$version` Potentiality
+
+A schema MAY carry a top-level `$version` integer field. Shells MAY use `$version` to drive cross-hash migration when the napplet's `aggregateHash` changes; shells MAY ignore it entirely and treat each hash as a fresh scope. NUB-CONFIG does NOT prescribe a migration strategy -- migration is a shell concern, and `$version` is a signal, not a contract.
+
+Napplets MUST NOT receive values that violate the currently-registered schema at `config.values` delivery time, regardless of how the shell reconciles older persisted values. Any clamping, dropping, or user-prompted merging happens entirely shell-side; the napplet only ever sees post-migration values.
+
+### Exclusions (Not in v1 Core Subset)
+
+The following are explicitly excluded from NUB-CONFIG v1:
+
+- **`pattern` keyword** -- excluded due to ReDoS (Regular Expression Denial of Service) risk. JavaScript's built-in `RegExp` engine is backtracking-based; a napplet-declared pattern such as `^(a|a)*$` against a 31-character input can consume tens of seconds of CPU on the shell's main thread. See CVE-2025-69873 (ajv validator) for a concrete real-world precedent of this class of vulnerability in JSON Schema validators. Readmission requires a shell-safe regex strategy (Worker + timeout, RE2-WASM, or equivalent) to be specified in a future revision of this NUB.
+- **`$ref`** -- ALL forms forbidden, including same-document (`#/definitions/foo`), external URL (`https://...`), filesystem (`file://`), and cross-document relative references. Rationale: schemas are self-contained; `$ref` resolution is a security surface (exfiltration, DoS via slow URLs, TOCTOU) and a renderer-complexity explosion.
+- **`definitions` / `$defs`** -- follows from the `$ref` exclusion; with no `$ref` there is nothing to reference.
+- **`oneOf`, `anyOf`, `allOf`, `not`** -- combinatorial schemas are out of Core Subset v1. Shells MAY support them as an Extended Subset, but napplets MUST NOT rely on them for conformant behavior.
+- **`if` / `then` / `else`** -- conditional schemas are out of scope for v1.
+- **`patternProperties`, `propertyNames`, `dependencies`, `dependentSchemas`, `unevaluatedProperties`** -- draft 2019-09+ features out of scope.
+- **Tuple-typed arrays** (`items: [schemaA, schemaB]`) -- only homogeneous arrays are in the Core Subset.
+- **Recursive `$ref` of any kind** -- forbidden by the `$ref` exclusion, called out explicitly here so there is no ambiguity.
+- **Expression-valued defaults** (`"$now()"`, `"$random()"`, etc.) -- `default` values are literal JSON per JSON Schema semantics. Napplets needing runtime-generated defaults MUST handle the `undefined` case in their own code.
+- **`x-napplet-secret: true` combined with a declared `default`** -- a secret with a hardcoded default is not a secret. Shells MUST reject any schema that declares both on the same property with `code: "secret-with-default"`.
+
+### Format as Hint Only
+
+The JSON Schema `format` keyword (`email`, `uri`, `date`, `date-time`, `color`, `ipv4`, `ipv6`, and others) is annotative in NUB-CONFIG: shells MAY use `format` to pick an input widget but MUST NOT reject a value solely because it fails the `format`. Napplets requiring strict validation MUST use `enum`, `minLength`, `maxLength`, `minimum`, or `maximum` -- NOT `format`.
+
+### Depth Limit
+
+Shells MUST reject schemas nesting `object` properties more than 4 levels deep at `config.registerSchema` time, returning `config.registerSchema.result` with `ok: false` and `code: "schema-too-deep"`. Napplets MUST NOT assume arbitrary nesting is supported.
