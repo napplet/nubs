@@ -276,3 +276,73 @@ The key words MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY in this document are t
 | Use `$version` for cross-hash migration | Shells MAY act on `$version` to migrate values across `aggregateHash` changes; MAY ignore it and treat each hash as a fresh scope. |
 | Retain a "graveyard" of orphaned non-secret values | For a single session in case the napplet author rolls back a schema change. Graveyard values MUST NOT be delivered. |
 | Emit `config.settingsOpened` after openSettings | Optional ack so napplets can fall back when UI is unavailable. Napplets MUST NOT rely on this message. |
+
+## Anti-Features
+
+The following ideas are deliberately excluded from NUB-CONFIG and MUST NOT appear in conformant implementations. They are listed here so that proposals to add them surface the prior rationale rather than re-litigating.
+
+- **`config.set` (napplet->shell write message)** -- violates the sole-writer invariant; defeats shell-UI validation and consent UX; enables silent settings override by compromised napplets.
+- **`$ref` / `definitions` / `$defs` in schemas** -- schemas are self-contained; $ref resolution is a security surface (exfiltration, DoS, TOCTOU) and a renderer complexity explosion. Bundle refs at build time.
+- **`pattern` keyword in Core Subset v1** -- ReDoS exposure per CVE-2025-69873 class. Readmission requires a shell-safe regex strategy in a future revision.
+- **napplet-rendered settings iframe** -- defeats consistent UX across napplets and places the settings surface inside the same sandbox that renders the napplet.
+- **napplet-supplied validation code** -- the shell executing napplet code is a sandbox violation and breaks validate-before-delivery.
+- **napplet-dictated UI widget hints (`ui:widget`)** -- turns NUB-CONFIG into a UI framework spec.
+- **Migration-as-napplet-code** -- shell is the risk carrier; `$version` as a signal suffices.
+- **Cross-napplet config sharing** -- violates per-napplet isolation (security property).
+- **Live two-way binding / streaming uncommitted keystrokes** -- creates validation flicker and storage churn; shells debounce and push on commit instead.
+- **JSON Schema draft 2020-12 conditional features** (`if`/`then`/`else`, `unevaluatedProperties`, `dependentSchemas`, `$dynamicRef`) -- enormous validator/UI complexity, no precedent uses them for extension config.
+- **OS-keychain secret handling as MUST** -- unimplementable in browser-only shells; kept as MAY.
+
+## Security Considerations
+
+### Source-identity scope binding
+
+Storage scope is derived from the napplet's `MessageEvent.source` at iframe creation per NIP-5D. The shell resolves `(dTag, aggregateHash)` from that source -- never from napplet-supplied payload. Consequence: NUB-CONFIG wire messages MUST NOT carry `dTag` or `aggregateHash` fields from the napplet side. A napplet cannot read, register, or mutate another napplet's configuration scope.
+
+### Cleartext secrets over postMessage
+
+`config.values` payloads are transmitted cleartext over `postMessage` to the napplet iframe, including fields marked `x-napplet-secret: true`. This is a property of the sandbox model (no secure key-exchange channel exists between a sandboxed iframe and its host that isn't itself `postMessage`). Implementers MUST be aware that:
+
+- Browser extensions with script access can observe the event
+- Developer-tools inspection exposes the payload
+- Crash reporters and analytics may capture it
+
+Shells SHOULD suppress console logging of `config.values` deliveries containing `x-napplet-secret: true` fields. Napplets SHOULD read secrets on demand and avoid holding them in long-lived memory. NUB-CONFIG does NOT claim secrets are "secure" -- the honest framing is that the shell decides when to deliver.
+
+### `additionalProperties: false` override
+
+JSON Schema draft-07 defaults `additionalProperties` to `true`. NUB-CONFIG overrides this: the top-level schema object is treated as if `additionalProperties: false` when the napplet does not specify otherwise. This prevents silent persisted-data accretion and makes schema evolution deterministic (orphaned properties drop out of delivery). Napplets SHOULD still declare `additionalProperties: false` explicitly for robustness across shell implementations.
+
+### External `$ref` forbidden
+
+All `$ref` forms are forbidden in v1 (see Schema Contract Exclusions). The ban is particularly important for external references (`http://`, `https://`, `file://`, `ftp://`): they enable data exfiltration (the request URL can carry stolen values), denial-of-service (slow or hanging URLs stall validation), and privacy leaks (every validation pings the remote). Shells MUST reject any schema containing `$ref` at `config.registerSchema` time.
+
+## Error Envelopes
+
+Every napplet->shell request type either returns a correlated result message with an `ok: boolean` field (positive ACK) or fires a matching push error. Result messages follow the NIP-5D envelope format `{ "type": "domain.action.result", "id", "ok", "code"?, "error"? }`. Error `code` values are drawn from the catalogue below; `error` is a human-readable explanation.
+
+### Error codes
+
+| Code | Emitted by | Meaning |
+|------|------------|---------|
+| `invalid-schema` | `config.registerSchema.result`, `config.schemaError` | Napplet-supplied schema is not parseable as JSON Schema draft-07 or later. |
+| `unsupported-draft` | `config.registerSchema.result`, `config.schemaError` | Schema declares a JSON Schema draft the shell does not support. |
+| `ref-not-allowed` | `config.registerSchema.result`, `config.schemaError` | Schema uses `$ref`, `definitions`, or `$defs`. |
+| `pattern-not-allowed` | `config.registerSchema.result`, `config.schemaError` | Schema uses the `pattern` keyword (excluded in Core Subset v1). |
+| `secret-with-default` | `config.registerSchema.result`, `config.schemaError` | A property marked `x-napplet-secret: true` declares a `default`. |
+| `schema-too-deep` | `config.registerSchema.result`, `config.schemaError` | Schema nesting exceeds the depth limit (4). |
+| `version-conflict` | `config.registerSchema.result`, `config.schemaError` | Re-registration declares a `$version` the shell does not accept. |
+| `no-schema` | `config.schemaError` | `config.subscribe` or `config.get` received before any schema has been registered for this source (no manifest, no runtime registerSchema). |
+| `unknown-section` | (see below -- non-normative) | `config.openSettings` referenced a section that does not exist on the currently-registered schema. SHOULD NOT be surfaced as an error envelope; shells SHOULD silently ignore (see Shell Guarantees SHOULD row for openSettings). |
+
+### Error cases
+
+**Malformed schema at registerSchema time.** A schema that is not parseable, declares an unsupported draft, uses forbidden features, or violates the depth limit is rejected. The shell emits `config.registerSchema.result` with `ok: false` and the appropriate `code`. Napplets that registered via `window.napplet.config.registerSchema()` observe the failure via the `onSchemaError` listener; the shim correlates the `.result` via `id`.
+
+**Undeclared section in openSettings.** When `config.openSettings({ section })` references a `section` not declared by any property's `x-napplet-section` in the currently-registered schema, shells SHOULD silently ignore the request (opening the settings UI to its default entry is acceptable). Shells MUST NOT return a wire error for this case -- that would leak shell internals. The section string is case-sensitive and compared as an opaque identifier.
+
+**Subscribe-before-schema.** `config.subscribe` or `config.get` that arrives before any schema has been registered (neither a manifest-declared schema nor a runtime `config.registerSchema`) receives a `config.schemaError` push with `code: "no-schema"`. No `config.values` is emitted until a valid schema has been registered.
+
+## Implementations
+
+- (none yet)
