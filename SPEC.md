@@ -10,7 +10,7 @@ This NIP defines a protocol for sandboxed web applications ("napplets") running 
 
 ## Philosophy
 
-A napplet is a Nostr applet — a small, focused application that does one thing well. Napplets SHOULD be single-purpose rather than monolithic. A chat widget, a feed viewer, a profile editor, and a relay manager are four napplets, not one application with four tabs. The shell composes napplets; napplets do not compose themselves.
+A napplet is a Nostr applet - a small, focused application that does one thing well. Napplets SHOULD be single-purpose rather than monolithic. A chat widget, a feed viewer, a profile editor, and a relay manager are four napplets, not one application with four tabs. The shell composes napplets; napplets do not compose themselves.
 
 ## Terminology
 
@@ -30,11 +30,11 @@ Napplet iframes MUST use this sandbox attribute:
 
     sandbox="allow-scripts"
 
-The `allow-same-origin` token MUST NOT be present. Shells MAY add additional sandbox tokens (`allow-forms`, `allow-modals`, `allow-downloads`, `allow-popups`) based on shell policy. Napplets have no access to `localStorage`, `sessionStorage`, `IndexedDB`, direct WebSocket connections, or `window.nostr`. All storage, signing, and relay access is proxied through the shell.
+The `allow-same-origin` token MUST NOT be present. Shells MAY add additional sandbox tokens (`allow-forms`, `allow-modals`, `allow-downloads`, `allow-popups`) based on shell policy. Napplets have no access to `localStorage`, `sessionStorage`, `IndexedDB`, direct WebSocket connections, or signing keys. All storage, signing, encryption, and relay access is proxied through the shell.
 
 The shell identifies senders via `MessageEvent.source` (unforgeable Window reference). Messages from unknown sources (iframes not created by the shell) MUST be silently dropped.
 
-Shells MUST provide a [NIP-07](07.md) `window.nostr` implementation to each napplet iframe.
+Shells MUST NOT provide `window.nostr` (NIP-07) to napplet iframes. Signing and encryption are security-critical operations that MUST be mediated by the shell. See the Security Rationale section below.
 
 ## Wire Format
 
@@ -73,14 +73,18 @@ At napplet load time, the shell checks `requires` tags against its own capabilit
 
 Napplets query capability support at runtime:
 
-    window.napplet.shell.supports('foo')       // NUB capability — boolean
-    window.napplet.shell.supports('popups')    // sandbox permission — boolean
+    window.napplet.shell.supports('foo')           // NUB capability — boolean
+    window.napplet.shell.supports('perm:popups')   // permission — boolean
 
-Shells MUST implement `window.napplet.shell.supports()`. Napplets MUST gracefully degrade when a capability is absent.
+Shells MUST implement `window.napplet.shell.supports()`. The argument is a namespaced capability string:
 
-Service discovery (e.g., audio, notifications) uses a separate API:
+| Prefix   | Example            | Meaning                         |
+|----------|--------------------|---------------------------------|
+| *(bare)* | `'relay'`          | Shorthand for `'nub:relay'`     |
+| `nub:`   | `'nub:identity'`   | Shell implements the identity NUB |
+| `perm:`  | `'perm:popups'`    | Shell grants popup permission   |
 
-    window.napplet.services.has('audio')      // boolean
+Napplets MUST gracefully degrade when a capability is absent.
 
 ## NUB Extension Framework
 
@@ -104,12 +108,10 @@ Napplets are untrusted code. The shell is trusted. The browser enforces iframe s
 3. Identity binding: the shell maps `MessageEvent.source` to napplet identity at iframe creation. The browser's `MessageEvent.source` is unforgeable within the same browsing context.
 4. Aggregate hash verification against [NIP-5A](5A.md) manifests; mismatch MAY result in napplet rejection.
 5. Unrecognized message types are silently ignored, preventing capability probing.
+6. Napplets produce cleartext only. Shells MUST NOT sign or broadcast events containing ciphertext received from a napplet. Shells MUST NOT provide `window.nostr` (NIP-07) or any signing/encryption primitives.
 
-Storage isolation, signing safety, relay access control, and ACL enforcement are defined by their respective NUB specs.
+Storage isolation, relay access control, and ACL enforcement are defined by their respective NUB specs.
 
 **Non-Guarantees:** The protocol does NOT protect against a compromised browser, a malicious shell, side-channel attacks, or social engineering.
 
 ## References
-
-- [NIP-07](07.md) -- `window.nostr` signer capability
-- [NIP-5A](5A.md) -- Napplet manifest format and aggregate hash
