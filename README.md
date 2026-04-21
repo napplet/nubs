@@ -26,7 +26,7 @@ Discovery: `shell.supports("relay")`.
 | [NUB-KEYS](https://github.com/napplet/nubs/pull/9) | `window.napplet.keys` | Keyboard forwarding and action keybindings | Draft |
 | [NUB-MEDIA](https://github.com/napplet/nubs/pull/10) | `window.napplet.media` | Media session control and playback | Draft |
 | [NUB-NOTIFY](https://github.com/napplet/nubs/pull/11) | `window.napplet.notify` | Shell-rendered notifications | Draft |
-| [NUB-CONFIG](https://github.com/napplet/nubs/pull/13) | `window.napplet.config` | Per-napplet declarative configuration (JSON Schema-driven) | Draft |
+| [NUB-CONFIG](https://github.com/napplet/nubs/pull/14) | `window.napplet.config` | Per-napplet declarative configuration (JSON Schema-driven) | Draft |
 
 ### NUB-NN (Message Protocol Specs)
 
