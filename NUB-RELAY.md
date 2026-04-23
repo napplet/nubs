@@ -64,7 +64,7 @@ Relay operations use the NIP-5D wire format. Requests include an `id` field for 
 | `relay.publish` | napplet -> shell | `id`, `event` (EventTemplate) |
 | `relay.publishEncrypted` | napplet -> shell | `id`, `event` (EventTemplate), `recipient` (hex pubkey), `encryption`? ('nip44' or 'nip04') |
 | `relay.query` | napplet -> shell | `id`, `filters` (NostrFilter array) |
-| `relay.event` | shell -> napplet | `subId`, `event` (NostrEvent) |
+| `relay.event` | shell -> napplet | `subId`, `event` (NostrEvent), `resources`? (ResourceSidecarEntry[]) |
 | `relay.eose` | shell -> napplet | `subId` |
 | `relay.closed` | shell -> napplet | `subId`, `reason`? (string) |
 | `relay.publish.result` | shell -> napplet | `id`, `ok` (boolean), `event`? (NostrEvent), `eventId`? (string), `error`? (string) |
@@ -127,6 +127,92 @@ All filter fields are optional. Multiple filters in the `filters` array are OR-c
 
 `relay.publish.result` includes `ok: false` and an `error` string on failure. `relay.closed` indicates the shell terminated a subscription, with an optional `reason`. `relay.query.result` MAY include an `error` field instead of `events` if the query fails.
 
+## Sidecar Pre-Resolution
+
+Shells MAY opportunistically pre-resolve byte resources referenced by an event before delivering the event to the subscribing napplet. When a shell has pre-fetched such resources, it MAY include them on the `relay.event` envelope in an optional `resources?: ResourceSidecarEntry[]` field. The napplet's subsequent `resource.bytes(url)` call (per NUB-RESOURCE) resolves from cache without a `postMessage` round-trip when the URL matches a sidecar entry.
+
+Pre-resolution is **OPTIONAL** with **default OFF** for privacy reasons documented below. Conformant shells MUST NOT enable sidecar pre-resolution by default.
+
+### `ResourceSidecarEntry` shape
+
+The shape is owned by NUB-RESOURCE; this spec imports it conceptually:
+
+```typescript
+interface ResourceSidecarEntry {
+  url: string;       // canonical URL form for this resource
+  blob: Blob;        // pre-fetched bytes
+  mime: string;      // shell-classified by byte-sniffing -- NEVER upstream Content-Type
+}
+```
+
+### Wire example (with sidecar)
+
+Shell pre-resolved the author's avatar before delivering a kind 1 event:
+
+```
+<- {
+     "type": "relay.event",
+     "subId": "sub-1",
+     "event": {
+       "id": "abc...",
+       "pubkey": "def...",
+       "kind": 1,
+       "content": "hello world",
+       "tags": [],
+       "created_at": 1234567890,
+       "sig": "..."
+     },
+     "resources": [
+       {
+         "url": "https://example.com/avatar.png",
+         "blob": <Blob 4321 bytes>,
+         "mime": "image/png"
+       }
+     ]
+   }
+```
+
+The field is additive and backward-compatible: shells that omit it produce envelopes that parse identically; napplets that ignore it behave exactly as before. NIP-5D §Wire Format mandates that unrecognized fields are silently ignored.
+
+### Ordering semantics
+
+When `resources` is present and non-empty, conformant napplet shim implementations MUST hydrate their `resource.bytes` single-flight cache (per NUB-RESOURCE) from the entries BEFORE delivering the event to the subscribing napplet's event handler. This ordering is load-bearing: it allows a synchronous `napplet.resource.bytes(url)` lookup inside the napplet's event handler to resolve from cache without a `postMessage` round-trip.
+
+If a `resources` entry's `url` is already present in the cache (e.g., from a prior fetch or a prior sidecar hydration), the shim MUST treat the existing cache entry as authoritative and discard the duplicate sidecar entry. This makes hydration idempotent and prevents a buggy shell from clobbering an in-flight fetch.
+
+### Default OFF privacy rationale
+
+**Conformant shells MUST default sidecar pre-resolution to OFF.** Opt-in is per-shell-policy and SHOULD be configurable by the user (or by the shell deployer for community-deployed shells).
+
+The privacy concerns motivating default-OFF:
+
+- **Pre-fetching reveals user activity to upstream hosts before the napplet has rendered the event.** When a shell pre-fetches the avatar URL on every event in a 1000-event timeline, that becomes 1000 HTTP requests to upstream avatar hosts -- each one a fingerprint visible to the operator of that host (IP address, user-agent, time-of-fetch). The user has not yet chosen to render any of these events; pre-fetching makes the choice for them.
+- **Encrypted DM events with embedded image URLs leak "user is online and got the message" telemetry.** A kind 4 / kind 1059 event with an inline `https://attacker.example.com/track.png` URL would, under naive pre-fetching, trigger a fetch as soon as the event arrives at the shell -- before the user opens the DM, possibly even when the user is AFK and would never have opened it.
+- **Pre-fetch failure on host-down events forces the napplet to fall back to `resource.bytes()` anyway**, doubling latency and RAM cost compared to fetching only when the napplet actually needs the bytes.
+- **Pre-fetch success on never-rendered events occupies shell content-cache memory speculatively.** A user who scrolls past 90% of their timeline has paid for 90% of those fetches in network, RAM, and (worst case) credentials.
+
+Together these concerns make "always on" sidecar pre-resolution privacy-hostile and resource-wasteful. Default OFF is the safe baseline; opt-in is the considered choice.
+
+### Per-event-kind allowlist guidance
+
+Shells that opt in to sidecar pre-resolution SHOULD only pre-fetch URLs that match a per-event-kind allowlist defined in shell policy. Recommended starting policy:
+
+- **Pre-fetch profile picture URLs** from kind 0 (metadata) events for authors the user follows, where the URL host is on a known-good Blossom or avatar-CDN allowlist.
+- **Pre-fetch artwork URLs** from kind 31337 / 31938 (long-form / podcast) events the user has explicitly subscribed to.
+- **Do NOT pre-fetch arbitrary `https:` URLs from event content** (kind 1, kind 4, kind 1059, etc.) -- this is the dominant fingerprinting vector and accounts for the bulk of "leaked-by-pre-fetch" attack surface.
+
+Shells SHOULD also provide users with control over:
+
+- Which event kinds receive sidecar pre-resolution (per-kind opt-in toggles).
+- Which URL hosts are eligible for pre-resolution (host allowlist).
+- Which napplets receive sidecar pre-resolution (per-napplet opt-in).
+
+Opt-out at any granularity MUST be honored. A user who opts out of sidecar pre-resolution for a specific napplet, kind, or host MUST receive `relay.event` envelopes with no `resources` field for the matching events; the shell MUST NOT silently downgrade to "we still fetched it but didn't tell you" -- if the user opted out, the fetch MUST NOT have happened.
+
+### Coordination with NUB-RESOURCE
+
+The `mime` field on each sidecar entry MUST be shell-classified by byte-sniffing per the same rules as `resource.bytes.result` in NUB-RESOURCE. Shells MUST NOT populate sidecar `mime` from the upstream `Content-Type` header. SVG entries appearing in a sidecar MUST be rasterized to PNG/WebP per NUB-RESOURCE's SVG Handling rules before being placed on the wire -- the sidecar is not a bypass for the rasterization MUST, the private-IP block list MUST, or any other Default Resource Policy rule. Pre-resolution is "the same fetch, just earlier"; every safety property of `resource.bytes` MUST hold for sidecar entries too.
+
 ## Shell Behavior
 
 - The shell MUST forward subscriptions to its relay pool and deliver matching events as `relay.event` messages to the subscribing napplet.
@@ -141,6 +227,7 @@ All filter fields are optional. Multiple filters in the `filters` array are OR-c
 - The shell MAY enforce ACL checks on relay read and relay write capabilities before processing subscribe or publish messages.
 - The shell MAY support scoped relay connections when the `relay` field is present, targeting a specific relay independently from the shared pool.
 - The shell MAY manage a relay pool internally -- which relays to connect to, reconnection strategy, and load balancing are implementation details.
+- The shell MAY opportunistically pre-resolve byte resources referenced by events and include them in `relay.event.resources`. Sidecar pre-resolution is **default OFF** per the Sidecar Pre-Resolution section; conformant shells MUST NOT enable it by default and SHOULD honor per-napplet / per-kind / per-host opt-out.
 
 ## Security Considerations
 
@@ -152,3 +239,4 @@ All filter fields are optional. Multiple filters in the `filters` array are OR-c
 - For incoming encrypted events (received via subscriptions), the shell decrypts the content before delivering it to the napplet. The napplet never sees ciphertext and never has access to decryption keys.
 - Scoped relay URLs SHOULD be validated by the shell to prevent SSRF-like abuse (e.g., napplets targeting internal network addresses via `wss://`).
 - Subscription filters SHOULD be validated to prevent resource exhaustion (e.g., unbounded subscriptions without `limit`).
+- Sidecar pre-resolution is **default OFF** for privacy reasons (see Sidecar Pre-Resolution § Default OFF privacy rationale). Pre-fetching byte resources referenced by events reveals user activity to upstream hosts before the user has chosen to render the event; this is the dominant fingerprinting vector on a relay-proxy surface and MUST NOT be enabled by default.
