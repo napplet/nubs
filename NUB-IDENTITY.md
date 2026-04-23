@@ -41,6 +41,11 @@ interface ProfileData {
   lud16?: string;
   website?: string;
 }
+```
+
+**Resource resolution.** The `picture` and `banner` fields are URL strings. Napplets that need the bytes (for example, to render an `<img>` via an object URL) MUST fetch them through NUB-RESOURCE: `window.napplet.resource.bytes(url)`. Napplets MUST NOT attempt direct `<img src="https://...">` loads — sandboxed napplets cannot make direct network requests under the iframe sandbox model defined by NIP-5D (`sandbox="allow-scripts"`, no `allow-same-origin`). Conformant shells expose every external byte resource through NUB-RESOURCE, including profile pictures and banners. The shell applies the standard NUB-RESOURCE policy to these fetches (private-IP block list at DNS-resolution time, MIME byte-sniffing, optional SVG rasterization, etc.).
+
+```typescript
 
 interface ZapReceipt {
   eventId: string;
