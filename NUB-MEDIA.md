@@ -37,6 +37,11 @@ interface MediaMetadata {
   duration?: number;
   mediaType?: 'audio' | 'video';
 }
+```
+
+**Resource resolution.** The `artwork.url` field is a URL string. Napplets and shells that need the artwork bytes (for example, to render album art on a media controls surface) MUST fetch them through NUB-RESOURCE: `window.napplet.resource.bytes(url)`. The optional `artwork.hash` field, when present, MAY be used by shells as a content-addressed cache key but is not a substitute for the URL fetch — napplets address artwork by URL through the resource NUB. Direct `<img src="https://...">` loads will not work under the iframe sandbox model defined by NIP-5D (`sandbox="allow-scripts"`, no `allow-same-origin`); the shell is the sole network-fetch broker. Standard NUB-RESOURCE policy applies (private-IP block list at DNS-resolution time, MIME byte-sniffing, SVG rasterization, etc.).
+
+```typescript
 
 interface MediaState {
   status: 'playing' | 'paused' | 'stopped' | 'buffering';
