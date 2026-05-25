@@ -33,6 +33,10 @@ per domain. Defines event semantics - what napplets agree on with each other.
 Napplets negotiate via `shell.supports("relay", "NUB-02")`. Example domains:
 feed rendering, chat, collaborative editing.
 
+| NUB ID | Domain | Description | Status |
+|--------|--------|-------------|--------|
+| [NUB-05](NUB-05.md) | stream context reporting | `stream:current-context` topic payload and behavior over NUB-IFC | Draft |
+
 ## Boundary Rule
 
 An interface (NUB-WORD) is **shell-provided** AND defines an **API surface**. A
