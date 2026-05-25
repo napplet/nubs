@@ -1,14 +1,14 @@
 NUB-01
 ======
 
-Profile Open
-------------
+Profile Topics
+--------------
 
 `draft`
 
 **NUB ID:** NUB-01
 
-**Domain:** profile navigation
+**Domain:** profile topic coordination
 
 **Requires:** NUB-IFC
 
@@ -16,17 +16,26 @@ Profile Open
 
 ## Description
 
-This protocol defines the `profile:open` topic semantics for napplets that want
-to request that another napplet open or focus a Nostr profile. It specifies the
-topic string, payload shape, producer behavior, and consumer behavior. It does
-not redefine NUB-IFC transport methods.
+This protocol defines the `profile:*` topic family for napplets that coordinate
+profile-related actions through NUB-IFC. The current revision defines
+`profile:open`. Future compatible revisions may define additional `profile:*`
+topics without requiring a separate numbered NUB for every small profile action.
+
+This protocol specifies topic strings, payload shapes, producer behavior, and
+consumer behavior. It does not redefine NUB-IFC transport methods.
 
 ## Message Protocol
 
 Napplets coordinate through NUB-IFC. The IFC event topic is carried by the
 event's `t` tag and the payload is carried as JSON in the event content. This
-NUB defines the meaning of one IFC topic; `ifc.emit`, `ifc.subscribe`,
-`ifc.unsubscribe`, and `ifc.event` remain generic NUB-IFC transport.
+NUB defines the meaning of selected `profile:*` topics; `ifc.emit`,
+`ifc.subscribe`, `ifc.unsubscribe`, and `ifc.event` remain generic NUB-IFC
+transport.
+
+Topics in this family MUST use the `profile:` prefix and MUST describe profile
+identity, profile display, or profile navigation behavior. A topic that belongs
+to another product domain, even when it references a public key, should use its
+own domain family instead of being placed here.
 
 ### `profile:open`
 
@@ -89,6 +98,7 @@ negotiated at runtime with `shell.supports()`.
 - Defining generic IFC transport.
 - Defining shell window placement, focus, or routing policy.
 - Defining profile metadata fetching, caching, or rendering.
+- Defining direct-message, chat, relay, or stream coordination topics.
 
 ## Implementations
 

@@ -35,7 +35,7 @@ feed rendering, chat, collaborative editing.
 
 | NUB ID | Domain | Description | Status |
 |--------|--------|-------------|--------|
-| [NUB-01](NUB-01.md) | profile navigation | `profile:open` topic payload and behavior over NUB-IFC | Draft |
+| [NUB-01](NUB-01.md) | profile topic coordination | `profile:*` topic payloads and behavior over NUB-IFC | Draft |
 
 ## Boundary Rule
 
